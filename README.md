@@ -1,8 +1,5 @@
 # Katuvisa — julkaisuohje
 
-Tämä kansio on valmis vietäväksi verkkoon sellaisenaan. Mitään ei tarvitse
-asentaa, kääntää tai buildata — riittää että tiedostot ovat jossain osoitteessa.
-
 Sovellus on **PWA** (progressive web app): tavallinen verkkosivu, jonka voi
 lisätä puhelimen aloitusnäytölle. Se avautuu kuin sovellus ilman selainpalkkia,
 toimii lentokonetilassa ja päivittyy ilman sovelluskauppaa.
@@ -20,13 +17,6 @@ toimii lentokonetilassa ja päivittyy ilman sovelluskauppaa.
 5. Odota 1–2 minuuttia ja päivitä sivu. Osoite näkyy ylhäällä:
    `https://KÄYTTÄJÄNIMESI.github.io/katuvisa/`
 
-Repositoryn on oltava **Public**, jotta Pages toimii ilmaisella tilillä.
-
-### Vaihtoehto: Netlify Drop (nopein, ~30 sekuntia)
-
-Mene osoitteeseen **app.netlify.com/drop** ja raahaa tämä kansio selaimeen.
-Saat osoitteen heti. Päivittäminen vaatii kuitenkin uuden raahauksen, joten
-GitHub on pidemmän päälle mukavampi.
 
 ---
 
