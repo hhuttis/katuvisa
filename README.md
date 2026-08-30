@@ -6,21 +6,8 @@ toimii lentokonetilassa ja päivittyy ilman sovelluskauppaa.
 
 ---
 
-## 1. Vie GitHubiin (GitHub Pages, ilmainen)
 
-1. Kirjaudu **github.com** → oikea yläkulma **+** → **New repository**
-2. Nimeksi esim. `katuvisa`, valitse **Public**, paina **Create repository**
-3. Klikkaa **uploading an existing file** → raahaa **koko tämän kansion sisältö**
-   selainikkunaan (myös `vendor`-alikansio) → **Commit changes**
-4. **Settings** → vasemmalta **Pages** → *Source*: **Deploy from a branch** →
-   haara **main**, kansio **/ (root)** → **Save**
-5. Odota 1–2 minuuttia ja päivitä sivu. Osoite näkyy ylhäällä:
-   `https://KÄYTTÄJÄNIMESI.github.io/katuvisa/`
-
-
----
-
-## 2. Lisää puhelimen aloitusnäytölle
+## 1. Lisää puhelimen aloitusnäytölle
 
 - **iPhone (Safari):** avaa osoite → jakonappi → **Lisää Koti-valikkoon**
 - **Android (Chrome):** avaa osoite → ⋮ → **Lisää aloitusnäyttöön**
@@ -29,7 +16,7 @@ Ensimmäisen avauksen jälkeen peli toimii myös ilman verkkoyhteyttä.
 
 ---
 
-## 3. Päivittäminen
+## 2. Päivittäminen
 
 1. Mene GitHubissa repositoryyn ja klikkaa muokattavaa tiedostoa
 2. Kynäkuvake (**Edit this file**) → tee muutokset → **Commit changes**
