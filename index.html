@@ -2,32 +2,15 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Katuvisa - Helsingin ydinkeskusta</title>
-<meta name="description" content="Opi Helsingin keskustan kadut, maamerkit ja menomestat visan avulla.">
-<meta name="theme-color" content="#f6f4ef">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Katuvisa">
-<meta name="mobile-web-app-capable" content="yes">
-<script src="./vendor/react.production.min.js"></script>
-<script src="./vendor/react-dom.production.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('./sw.js').catch(function () {});
-    });
-  }
-</script>
 </head>
 <body>
 <x-dc>
 <helmet>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,200..700,0,0&amp;display=swap" rel="stylesheet">
   <script src="./map-data.js"></script>
   <script src="./street-facts.js"></script>
   <script src="./party-facts.js"></script>
@@ -40,20 +23,35 @@
     input, button { font-family: inherit; }
     @keyframes hkiPulse { 0%, 100% { opacity: .14; } 50% { opacity: .42; } }
     @keyframes hkiIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @keyframes hkiFlameUp { 0% { opacity: 0; transform: translateY(6px) scale(.65) rotate(-4deg); } 14% { opacity: 1; transform: translateY(-6px) scale(1.05) rotate(3deg); } 30% { transform: translateY(-14px) scale(.95) rotate(-3deg); } 45% { transform: translateY(-18px) scale(1.12) rotate(4deg); } 60% { transform: translateY(-21px) scale(.98) rotate(-2deg); } 75% { opacity: 1; transform: translateY(-24px) scale(1.08) rotate(3deg); } 88% { opacity: .7; transform: translateY(-28px) scale(1) rotate(-2deg); } 100% { opacity: 0; transform: translateY(-40px) scale(.85) rotate(2deg); } }
+    @keyframes hkiFlash { 0% { opacity: 0; transform: translateY(22px) scale(.94); } 16% { opacity: 1; transform: translateY(0) scale(1); } 70% { opacity: 1; transform: translateY(-4px); } 100% { opacity: 0; transform: translateY(-16px) scale(.97); } }
+    @keyframes hkiRise { 0% { opacity: 0; transform: translateY(26px) scale(.94); } 60% { opacity: 1; transform: translateY(-2px) scale(1); } 100% { opacity: 1; transform: none; } }
+    @keyframes hkiPop { 0% { opacity: 0; transform: scale(.6); } 60% { opacity: 1; transform: scale(1.18); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes hkiPts { 0% { opacity: 0; transform: translateY(6px); } 20% { opacity: 1; transform: translateY(0); } 65% { opacity: 1; transform: translateY(-10px); } 100% { opacity: 0; transform: translateY(-20px); } }
   </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-direction: column; gap: 14px; padding: 20px 26px 24px;">
+<div style="min-height: 100vh; display: flex; flex-direction: column; gap: 14px; padding: 20px 26px 88px;">
 
-  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
-    <div style="display: flex; flex-direction: column; gap: 4px;">
-      <div style="font-family: inherit; font-size: 12px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">{{ eyebrow }}</div>
-      <h1 style="margin: 0; font-size: 26px; font-weight: 600; letter-spacing: -0.015em;">Katuvisa</h1>
-    </div>
-    <div style="display: flex; align-items: center; gap: 14px; position: relative;">
-      <div style="display: flex; align-items: baseline; gap: 8px;">
-        <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">Pisteet</span>
-        <span style="font-size: 15px; font-weight: 600; line-height: 1;">{{ score }}</span>
+  <div style="display: grid; grid-template-columns: {{ headerCols }}; grid-template-rows: {{ headerRows }}; column-gap: 22px; row-gap: 12px; align-items: start; margin-bottom: -2px; margin-top: {{ headerMt }};">
+      <div style="grid-column: 1; grid-row: 1; height: 34px; display: flex; align-items: flex-end;">
+        <div style="font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">{{ eyebrow }}</div>
       </div>
+      <div style="grid-column: 1; grid-row: 2; display: flex; align-items: center;">
+        <sc-if value="{{ inGame }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ quit }}" title="Etusivulle" style="display: flex; align-items: center; gap: 4px; border: none; background: transparent; color: #20201d; font-family: inherit; font-size: 26px; line-height: 1; font-weight: 600; letter-spacing: -0.015em; padding: 2px 8px 2px 2px; margin-left: -10px; border-radius: 9px; cursor: pointer;" style-hover="background: #efece5;">
+            <span style="font-family: 'Material Symbols Rounded'; font-size: 30px; line-height: 1; font-weight: 300; font-variation-settings: 'FILL' 0, 'wght' 250; color: #6b6a63;">chevron_left</span>
+            <span>{{ modeTitle }}</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ showEyebrow }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <h1 style="margin: 0; font-size: 26px; line-height: 1.15; font-weight: 600; letter-spacing: -0.015em; text-wrap: pretty;">Kuinka hyvin tunnet Helsingin kadut?</h1>
+            <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #57544d; white-space: nowrap;">Testaa taitosi ja opi ydinkeskustan katuverkosto pelaamalla<br></p>
+          </div>
+        </sc-if>
+      </div>
+    <div data-popover="menu" style="grid-column: 2; grid-row: 1; height: 34px; display: flex; align-items: center; justify-content: flex-end; gap: 14px; position: relative;">
+      <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
       <button onClick="{{ toggleMenu }}" title="Lisää" style="border: none; background: transparent; color: #a8a49a; font-size: 18px; line-height: 1; padding: 4px 6px; border-radius: 8px; cursor: pointer;" style-hover="color: #57544d; background: #efece5;">···</button>
       <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
         <div style="position: absolute; top: 30px; right: 0; z-index: 20; width: 288px; background: #fffefb; border: 1px solid #dedad1; border-radius: 12px; padding: 6px; box-shadow: 0 8px 24px rgba(32,32,29,.12); display: flex; flex-direction: column; gap: 2px;">
@@ -73,15 +71,28 @@
           </button>
         </div>
       </sc-if>
+      </sc-if>
+    </div>
+    <div style="grid-column: 2; grid-row: 2; align-self: stretch; display: flex; align-items: flex-end; justify-content: flex-end; min-height: 20px;">
     </div>
   </div>
 
   <div style="display: flex; flex-wrap: wrap; gap: 22px; align-items: stretch;">
 
+    <sc-if value="{{ showMap }}" hint-placeholder-val="{{ true }}">
     <div style="flex: 1 1 380px; min-width: 240px; display: flex;">
-      <div style="position: relative; flex: 1 1 auto; width: 100%; aspect-ratio: 1 / 1; max-height: 74vh; min-height: 320px; background: #f2efe9; border: 1px solid #d8d2c6; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 2px rgba(32,32,29,.05);">
+      <div style="position: relative; flex: 1 1 auto; width: 100%; aspect-ratio: 1 / 1; max-height: 74vh; min-height: 320px; background: #f2efe9; border: 1px solid #d8d2c6; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(32,32,29,.05);">
         <div ref="{{ setBox }}" style="position: absolute; inset: 0;">{{ map }}</div>
-        <div style="position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 6px;">
+        <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 0; right: 0; top: 0; z-index: 6; display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px 15px; background: {{ verdictBg }}; border-bottom: 1px solid {{ verdictBd }}; border-left: 4px solid {{ verdictColor }}; animation: hkiIn .2s ease-out;">
+            <span style="font-family: 'Material Symbols Rounded'; font-size: 22px; line-height: 1; font-weight: 400; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; color: {{ verdictColor }};">{{ verdictIcon }}</span>
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <span style="font-size: 15px; font-weight: 700; color: {{ verdictColor }};">{{ verdict }}</span>
+              <span style="font-size: 14px; line-height: 1.45; color: #6b6a63;">{{ verdictNote }}</span>
+            </div>
+          </div>
+        </sc-if>
+        <div style="position: absolute; right: 12px; top: {{ zoomTop }}; z-index: 7; display: flex; flex-direction: column; gap: 6px;">
           <button onClick="{{ zoomIn }}" title="Lähennä" style="width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #d3ccc0; background: rgba(255,254,251,.94); color: {{ zoomInColor }}; border-radius: 9px; font-size: 20px; font-weight: 600; line-height: 1; cursor: pointer; box-shadow: 0 1px 2px rgba(32,32,29,.08);" style-hover="background: #ffffff; border-color: #b8b2a5;">+</button>
           <button onClick="{{ zoomOut }}" title="Loitonna" style="width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #d3ccc0; background: rgba(255,254,251,.94); color: {{ zoomOutColor }}; border-radius: 9px; font-size: 22px; font-weight: 600; line-height: 1; cursor: pointer; box-shadow: 0 1px 2px rgba(32,32,29,.08);" style-hover="background: #ffffff; border-color: #b8b2a5;">−</button>
           <sc-if value="{{ isZoomed }}" hint-placeholder-val="{{ false }}">
@@ -94,8 +105,9 @@
         <div style="position: absolute; left: 12px; bottom: 10px; font-family: inherit; font-size: 10px; color: #8f8b81; background: rgba(255,254,251,.72); padding: 2px 6px; border-radius: 4px;">© OpenStreetMap</div>
       </div>
     </div>
+    </sc-if>
 
-    <div style="flex: 0 1 358px; min-width: 260px; display: flex; flex-direction: column; gap: 13px;">
+    <div style="flex: {{ panelFlex }}; max-width: {{ panelMax }}; min-width: 260px; display: flex; flex-direction: column; gap: 13px;">
 
       <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
         <div style="display: flex; flex-direction: column; gap: 13px;">
@@ -111,6 +123,7 @@
                 <span style="font-size: 14px; font-weight: 600;">Tunnista katu</span>
                 <span style="font-size: 14px; line-height: 1.4; color: #6b6a63;">Valitse oikea nimi neljästä</span>
               </button>
+              <sc-if value="{{ showAllModes }}" hint-placeholder-val="{{ true }}">
               <button onClick="{{ pickFind }}" style="border: 1.5px solid {{ findBd }}; background: {{ findBg }}; text-align: left; padding: 12px 13px; border-radius: 11px; cursor: pointer; display: flex; flex-direction: column; gap: 2px;" style-hover="border-color: #b8b2a5;">
                 <span style="font-size: 14px; font-weight: 600;">Löydä kartalta</span>
                 <span style="font-size: 14px; line-height: 1.4; color: #6b6a63;">Klikkaa nimettyä katua kartalta</span>
@@ -119,6 +132,7 @@
                 <span style="font-size: 14px; font-weight: 600;">Kirjoita nimi</span>
                 <span style="font-size: 14px; line-height: 1.4; color: #6b6a63;">Kirjoita nimi ilman vaihtoehtoja</span>
               </button>
+              </sc-if>
             </div>
           </div>
 
@@ -141,28 +155,15 @@
             </div>
           </sc-if>
 
-          <button onClick="{{ start }}" style="border: none; background: #20201d; color: #f6f4ef; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; letter-spacing: 0;" style-hover="background: #3a3934;">{{ startLabel }}</button>
-          <div style="display: flex; gap: 10px; flex-wrap: wrap; font-size: 14px; color: #918d83;">
-            <span>{{ scopeInfo }}</span>
-          </div>
+          <button onClick="{{ start }}" style="border: none; background: #20201d; color: #f6f4ef; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer;" style-hover="background: #3a3934;">{{ startLabel }}</button>
+
         </div>
       </sc-if>
 
       <sc-if value="{{ isStudy }}" hint-placeholder-val="{{ false }}">
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <div style="display: flex; justify-content: space-between; font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">
-            <span>Harjoittelu · {{ studyCounter }}</span>
-            <span>{{ scopeName }}</span>
-          </div>
-
-          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 16px;">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
             <div style="font-size: 26px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2;">{{ target }}</div>
-            <sc-if value="{{ hasFact }}" hint-placeholder-val="{{ true }}">
-              <div style="display: flex; gap: 10px; background: #f7f5ef; border: 1px solid #e7e2d7; border-radius: 11px; padding: 12px 14px;">
-                <span style="font-size: 15px; line-height: 1; color: #b5893f;">✦</span>
-                <span style="font-size: 14px; line-height: 1.55; color: #57544d; text-wrap: pretty;">{{ fact }}</span>
-              </div>
-            </sc-if>
             <div style="font-size: 14px; color: #918d83; line-height: 1.5;">Katu on korostettu kartalla. Voit myös klikata mitä tahansa katua kartalta.</div>
             <div style="display: flex; gap: 8px;">
               <button onClick="{{ prev }}" style="flex: 1 1 0; border: 1.5px solid #dedad1; background: transparent; color: #3a3934; padding: 13px 16px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer;" style-hover="border-color: #b8b2a5;">Edellinen</button>
@@ -170,51 +171,55 @@
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="flex: 1 1 auto; min-height: 120px; display: flex; flex-direction: column; gap: 8px;">
             <div style="font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">Alueen kadut</div>
-            <div style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 240px; overflow-y: auto; padding-right: 2px;">
-              <sc-for list="{{ studyList }}" as="s" hint-placeholder-count="12">
-                <button onClick="{{ s.click }}" style="border: 1px solid {{ s.bd }}; background: {{ s.bg }}; color: {{ s.fg }}; padding: 6px 11px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;">{{ s.label }}</button>
-              </sc-for>
+            <div style="position: relative; flex: 1 1 auto; min-height: 0;">
+              <div style="position: absolute; inset: 0; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; overflow-y: auto; padding: 0 2px 14px 0;">
+                <sc-for list="{{ studyList }}" as="s" hint-placeholder-count="12">
+                  <button onClick="{{ s.click }}" style="border: 1px solid {{ s.bd }}; background: {{ s.bg }}; color: {{ s.fg }}; padding: 6px 11px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;">{{ s.label }}</button>
+                </sc-for>
+              </div>
+              <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 26px; pointer-events: none; background: linear-gradient(to bottom, rgba(246,244,239,0), rgba(246,244,239,.95));"></div>
+              <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: #e2ded5;"></div>
             </div>
           </div>
 
-          <button onClick="{{ quit }}" style="border: 1.5px solid #dedad1; background: transparent; color: #6b6a63; padding: 11px 16px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer; align-self: flex-start;" style-hover="border-color: #b8b2a5;">Takaisin valikkoon</button>
+
         </div>
       </sc-if>
 
       <sc-if value="{{ isPlay }}" hint-placeholder-val="{{ false }}">
         <div style="display: flex; flex-direction: column; gap: 16px;">
 
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <div style="display: flex; justify-content: space-between; font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">
-              <span>{{ progressLabel }}</span>
-              <span>{{ scopeName }}</span>
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">
+              <span style="color: #3f3d38;">{{ prompt }}</span>
+              <span style="white-space: nowrap; color: #3f3d38;">{{ progressLabel }}</span>
             </div>
-            <div style="height: 4px; background: #e6e2d9; border-radius: 999px; overflow: hidden;">
-              <div style="height: 100%; width: {{ progressPct }}; background: #20201d; border-radius: 999px;"></div>
-            </div>
-          </div>
-
-          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
-            <div style="font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">{{ prompt }}</div>
 
             <sc-if value="{{ isFind }}" hint-placeholder-val="{{ false }}">
-              <div style="font-size: 26px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2;">{{ target }}</div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <div style="font-size: 26px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2;">{{ target }}</div>
+              </div>
             </sc-if>
 
             <sc-if value="{{ isMc }}" hint-placeholder-val="{{ false }}">
               <div style="display: flex; flex-direction: column; gap: 8px;">
                 <sc-for list="{{ options }}" as="op" hint-placeholder-count="4">
-                  <button onClick="{{ op.click }}" style="border: 1.5px solid {{ op.bd }}; background: {{ op.bg }}; color: {{ op.fg }}; padding: 13px 16px; border-radius: 11px; font-size: 14px; font-weight: 600; text-align: left; cursor: {{ op.cursor }};">{{ op.label }}</button>
+                  <button onClick="{{ op.click }}" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1.5px solid {{ op.bd }}; background: {{ op.bg }}; color: {{ op.fg }}; padding: 13px 16px; border-radius: 11px; font-size: 14px; font-weight: 600; text-align: left; outline: none; cursor: {{ op.cursor }};">
+                    <span>{{ op.label }}</span>
+                    <sc-if value="{{ op.hasTag }}" hint-placeholder-val="{{ false }}">
+                      <span style="flex: 0 0 auto; font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0; text-transform: none; color: {{ op.tagFg }}; background: {{ op.tagBg }}; border: 1px solid {{ op.tagBd }}; padding: 3px 8px; border-radius: 999px;">{{ op.tag }}</span>
+                    </sc-if>
+                  </button>
                 </sc-for>
               </div>
             </sc-if>
 
             <sc-if value="{{ isType }}" hint-placeholder-val="{{ false }}">
               <div style="display: flex; gap: 8px;">
-                <input id="katuvisa-answer" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" placeholder="Kadun nimi" disabled="{{ answered }}" style="flex: 1 1 auto; min-width: 0; border: 1.5px solid #dedad1; background: #f9f8f4; border-radius: 11px; padding: 13px 15px; font-size: 14px; font-weight: 600; color: #20201d; outline: none;" style-focus="border-color: #20201d;" />
-                <button onClick="{{ submit }}" style="border: none; background: #20201d; color: #f6f4ef; padding: 13px 18px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer;">Vastaa</button>
+                <input id="katuvisa-answer" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" placeholder="Kadun nimi" disabled="{{ answered }}" style="flex: 1 1 auto; min-width: 0; border: 1.5px solid #dedad1; background: #f9f8f4; border-radius: 11px; padding: 13px 15px; font-size: 14px; font-weight: 600; color: #20201d; outline: none;" style-focus="border-color: #20201d;">
+                <button onClick="{{ submit }}" disabled="{{ answered }}" style="border: 1.5px solid {{ submitBd }}; background: {{ submitBg }}; color: {{ submitFg }}; padding: 13px 18px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: {{ submitCursor }};">Vastaa</button>
               </div>
             </sc-if>
 
@@ -225,57 +230,439 @@
             <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
               <div style="display: flex; flex-direction: column; gap: 12px; animation: hkiIn .22s ease-out;">
                 <div style="height: 1px; background: #ebe7de;"></div>
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                  <div style="font-size: 14px; font-weight: 600; color: {{ verdictColor }};">{{ verdict }}</div>
-                  <div style="font-size: 14px; color: #57544d; line-height: 1.5;">{{ verdictNote }}</div>
-                </div>
+                <sc-if value="{{ isTypeVerdict }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 3px;">
+                    <span style="font-size: 14px; font-weight: 700; color: {{ verdictColor }};">{{ verdict }}</span>
+                    <sc-if value="{{ isTypeWrong }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size: 14px; font-weight: 600; color: #3f3d38;">Oikea vastaus: {{ target }}</span>
+                    </sc-if>
+                  </div>
+                </sc-if>
                 <sc-if value="{{ hasFact }}" hint-placeholder-val="{{ false }}">
                   <div style="display: flex; gap: 10px; background: #f7f5ef; border: 1px solid #e7e2d7; border-radius: 11px; padding: 12px 14px;">
                     <span style="font-size: 15px; line-height: 1; color: #b5893f;">✦</span>
                     <span style="font-size: 14px; line-height: 1.55; color: #57544d; text-wrap: pretty;">{{ fact }}</span>
                   </div>
                 </sc-if>
-                <button onClick="{{ next }}" style="border: none; background: #20201d; color: #f6f4ef; padding: 13px 18px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer; align-self: flex-start;" title="Enter">{{ nextLabel }}</button>
               </div>
             </sc-if>
           </div>
-
-          <button onClick="{{ quit }}" style="border: 1.5px solid #dedad1; background: transparent; color: #6b6a63; padding: 11px 16px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer; align-self: flex-start;" style-hover="border-color: #b8b2a5;">Lopeta kierros</button>
         </div>
       </sc-if>
 
       <sc-if value="{{ isResult }}" hint-placeholder-val="{{ false }}">
-        <div style="display: flex; flex-direction: column; gap: 18px;">
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <div style="font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">Kierros valmis</div>
-            <div style="font-size: 36px; font-weight: 600; letter-spacing: -0.02em; line-height: 1;">{{ resultScore }}</div>
-            <div style="font-size: 14px; color: #57544d;">{{ resultSub }}</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 22px; align-items: stretch; padding-top: 4px;">
+
+          <div style="flex: 1 1 380px; min-width: 240px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="position: relative; width: 100%; aspect-ratio: 1 / 1; max-height: 74vh; min-height: 320px; background: #f2efe9; border: 1px solid #d8d2c6; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(32,32,29,.05);">
+              <div ref="{{ setBox }}" style="position: absolute; inset: 0;">{{ map }}</div>
+              <div style="position: absolute; right: 12px; top: 12px; z-index: 7; display: flex; flex-direction: column; gap: 6px;">
+                <button onClick="{{ zoomIn }}" title="Lähennä" style="width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #d3ccc0; background: rgba(255,254,251,.94); color: #3a3934; border-radius: 9px; font-size: 20px; font-weight: 600; line-height: 1; cursor: pointer; box-shadow: 0 1px 2px rgba(32,32,29,.08);" style-hover="background: #ffffff; border-color: #b8b2a5;">+</button>
+                <button onClick="{{ zoomOut }}" title="Loitonna" style="width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #d3ccc0; background: rgba(255,254,251,.94); color: #3a3934; border-radius: 9px; font-size: 22px; font-weight: 600; line-height: 1; cursor: pointer; box-shadow: 0 1px 2px rgba(32,32,29,.08);" style-hover="background: #ffffff; border-color: #b8b2a5;">−</button>
+                <sc-if value="{{ isZoomed }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ zoomReset }}" title="Palauta näkymä" style="width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #d3ccc0; background: rgba(255,254,251,.94); color: #3a3934; border-radius: 9px; font-family: inherit; font-size: 11px; font-weight: 500; cursor: pointer; box-shadow: 0 1px 2px rgba(32,32,29,.08);" style-hover="background: #ffffff; border-color: #b8b2a5;">1:1</button>
+                </sc-if>
+              </div>
+              <div style="position: absolute; left: 14px; bottom: 14px; display: flex; flex-wrap: wrap; gap: 8px;">
+                <span style="display: flex; align-items: center; gap: 7px; padding: 6px 12px; background: rgba(255,254,251,.94); border: 1px solid #e2ded5; border-radius: 999px; font-size: 12px; font-weight: 600; color: #3f3d38;">
+                  <span style="width: 14px; height: 4px; border-radius: 999px; background: #1f7a3f;"></span>Oikein
+                </span>
+                <span style="display: flex; align-items: center; gap: 7px; padding: 6px 12px; background: rgba(255,254,251,.94); border: 1px solid #e2ded5; border-radius: 999px; font-size: 12px; font-weight: 600; color: #3f3d38;">
+                  <span style="width: 14px; height: 4px; border-radius: 999px; background: #b23b28;"></span>Väärin
+                </span>
+              </div>
+            </div>
+            <div style="font-size: 13px; color: #918d83;">{{ resultAreaLine }}</div>
           </div>
 
+          <div style="flex: 0 1 358px; min-width: 260px; display: flex; flex-direction: column; gap: 14px;">
+
+          <sc-if value="{{ cardA }}" hint-placeholder-val="{{ true }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 18px;">
+            <div style="display: flex; flex-direction: column; gap: 22px; margin: -20px -20px 0; padding: 26px 20px 24px; background: #eef2fb; border-bottom: 1px solid #dde5f4; border-radius: 8px 8px 0 0;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; flex-wrap: wrap;">
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="font-family: inherit; font-size: 11px; font-weight: 400; line-height: 1.7; letter-spacing: 0.06em; text-transform: uppercase; color: #7f8ba5"><b>Kierros valmis! Tasosi on</b></div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 32px; line-height: 1;">{{ rankEmoji }}</span>
+                  <span style="font-size: 22px; font-weight: 600; letter-spacing: -0.015em;">{{ rankTitle }}</span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: baseline; gap: 7px;">
+                <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.025em; line-height: 1; color: #20201d;">{{ resultScoreNum }}</span>
+                <span style="font-size: 14px; font-weight: 600; color: #6b6a63;">pistettä</span>
+              </div>
+            </div>
+
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0;">
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 0 0 11px; font-size: 14px;">
+                <span style="color: #57544d;">Oikein</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statHitsValue }}</span>
+              </div>
+              <div style="height: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; font-size: 14px;">
+                <span style="color: #57544d;">Pisin putki</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statStreakValue }}</span>
+              </div>
+              <div style="height: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; font-size: 14px;">
+                <span style="color: #57544d;">Paras kerroin</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statBestValue }}</span>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardB }}" hint-placeholder-val="{{ false }}">
+          <div style="border: 1px solid #d8d2c6; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background: #20201d; padding: 26px 22px 24px; display: flex; flex-direction: column; gap: 20px;">
+              <div style="font-family: inherit; font-size: 11px; font-weight: 600; line-height: 1.7; letter-spacing: 0.06em; text-transform: uppercase; color: #8f8b81;">Kierros valmis!<br>Tasosi on</div>
+              <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span style="font-size: 34px; line-height: 1;">{{ rankEmoji }}</span>
+                  <span style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: #f6f4ef;">{{ rankTitle }}</span>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 7px;">
+                  <span style="font-size: 32px; font-weight: 700; letter-spacing: -0.025em; line-height: 1; color: #f6f4ef;">{{ resultScoreNum }}</span>
+                  <span style="font-size: 14px; font-weight: 600; color: #a8a49a;">pistettä</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 9px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <span style="font-size: 14px; color: #a8a49a;">Osumatarkkuus</span>
+                  <span style="font-size: 14px; font-weight: 600; color: #f6f4ef;">{{ accuracyLabel }}</span>
+                </div>
+                <div style="height: 5px; background: #3a3934; border-radius: 999px; overflow: hidden;">
+                  <div style="height: 100%; width: {{ accuracyPct }}; background: #f6f4ef; border-radius: 999px; transition: width .9s cubic-bezier(.2,.8,.2,1);"></div>
+                </div>
+              </div>
+            </div>
+            <div style="background: #fffefb; padding: 18px 22px 20px;">
+            <div style="display: flex; flex-direction: column; gap: 0;">
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 0 0 11px; font-size: 14px;">
+                <span style="color: #57544d;">Oikein</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statHitsValue }}</span>
+              </div>
+              <div style="height: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; font-size: 14px;">
+                <span style="color: #57544d;">Pisin putki</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statStreakValue }}</span>
+              </div>
+              <div style="height: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 11px 0 0; font-size: 14px;">
+                <span style="color: #57544d;">Paras kerroin</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statBestValue }}</span>
+              </div>
+            </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardC }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 30px 22px 22px; display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
+              <span style="width: 76px; height: 76px; display: flex; align-items: center; justify-content: center; font-size: 38px; line-height: 1; background: #f4f2ec; border: 1px solid #e7e2d7; border-radius: 999px;">{{ rankEmoji }}</span>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div style="font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">Kierros valmis! Tasosi on</div>
+                <div style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em;">{{ rankTitle }}</div>
+              </div>
+            </div>
+            <div style="width: 100%; display: flex; justify-content: center; gap: 32px; padding: 18px 0; border-top: 1px solid #ebe7de; border-bottom: 1px solid #ebe7de;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #20201d;">{{ resultScoreNum }}</span>
+                <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #918d83;">Pistettä</span>
+              </div>
+              <div style="width: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #20201d;">{{ accuracyLabel }}</span>
+                <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #918d83;">Osumatarkkuus</span>
+              </div>
+            </div>
+            <div style="width: 100%; text-align: left;">
+            <div style="display: flex; flex-direction: column; gap: 0;">
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 0 0 11px; font-size: 14px;">
+                <span style="color: #57544d;">Oikein</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statHitsValue }}</span>
+              </div>
+              <div style="height: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; font-size: 14px;">
+                <span style="color: #57544d;">Pisin putki</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statStreakValue }}</span>
+              </div>
+              <div style="height: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; justify-content: space-between; gap: 12px; padding: 11px 0 0; font-size: 14px;">
+                <span style="color: #57544d;">Paras kerroin</span>
+                <span style="font-weight: 600; color: #20201d;">{{ statBestValue }}</span>
+              </div>
+            </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardD }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 26px 22px 24px; display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
+            <div style="display: flex; align-items: center; gap: 16px; text-align: left;">
+              <span style="flex: 0 0 auto; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; font-size: 34px; line-height: 1; background: #f4f2ec; border: 1px solid #e7e2d7; border-radius: 16px;">{{ rankEmoji }}</span>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">Kierros valmis! Tasosi on</div>
+                <div style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em;">{{ rankTitle }}</div>
+              </div>
+            </div>
+            <div style="width: 100%; display: flex; justify-content: center; gap: 32px; padding: 18px 0; border-top: 1px solid #ebe7de; border-bottom: 1px solid #ebe7de;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #20201d;">{{ resultScoreNum }}</span>
+                <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #918d83;">Pistettä</span>
+              </div>
+              <div style="width: 1px; background: #ebe7de;"></div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #20201d;">{{ accuracyLabel }}</span>
+                <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #918d83;">Osumatarkkuus</span>
+              </div>
+            </div>
+            <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+              <span style="height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #f7f9fd; border: 1px solid #e4eaf7; border-radius: 999px; font-size: 13px; font-weight: 600; color: #4a5c85; white-space: nowrap;">🎯 Oikein {{ statHitsValue }}</span>
+              <span style="height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #faf6f0; border: 1px solid #ece2d4; border-radius: 999px; font-size: 13px; font-weight: 600; color: #8a6636; white-space: nowrap;">🔥 Pisin putki {{ statStreakValue }}</span>
+              <span style="height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #f5f8f5; border: 1px solid #dfe8df; border-radius: 999px; font-size: 13px; font-weight: 600; color: #2f6144; white-space: nowrap;">🏅 Paras kerroin {{ statBestValue }}</span>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardE }}" hint-placeholder-val="{{ false }}">
+          <div style="border: 1px solid #dedad1; border-radius: 8px; overflow: hidden; background: #fffefb;">
+            <div style="display: flex; align-items: center; gap: 16px; padding: 20px 22px; background: #eef2fb; border-bottom: 1px solid #dde5f4;">
+              <span style="flex: 0 0 auto; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; font-size: 30px; line-height: 1; background: #fffefb; border: 1px solid #dde5f4; border-radius: 999px;">{{ rankEmoji }}</span>
+              <div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #7f8ba5;">Kierros valmis! Tasosi on</span>
+                <span style="font-size: 22px; font-weight: 600; letter-spacing: -0.015em; color: #20201d;">{{ rankTitle }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                <span style="font-size: 28px; font-weight: 700; letter-spacing: -0.025em; line-height: 1; color: #20201d;">{{ resultScoreNum }}</span>
+                <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #7f8ba5;">Pistettä</span>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 22px 20px;">
+              <span style="height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #f7f9fd; border: 1px solid #e4eaf7; border-radius: 999px; font-size: 13px; font-weight: 600; color: #4a5c85; white-space: nowrap;">🎯 Oikein {{ statHitsValue }}</span>
+              <span style="height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #faf6f0; border: 1px solid #ece2d4; border-radius: 999px; font-size: 13px; font-weight: 600; color: #8a6636; white-space: nowrap;">🔥 Pisin putki {{ statStreakValue }}</span>
+              <span style="height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #f5f8f5; border: 1px solid #dfe8df; border-radius: 999px; font-size: 13px; font-weight: 600; color: #2f6144; white-space: nowrap;">🏅 Paras kerroin {{ statBestValue }}</span>
+              <span style="height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #f4f2ec; border: 1px solid #e7e2d7; border-radius: 999px; font-size: 13px; font-weight: 600; color: #57544d; white-space: nowrap;">📍 {{ accuracyLabel }}</span>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardF }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 28px 22px 22px; display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+              <span style="width: 84px; height: 84px; display: flex; align-items: center; justify-content: center; font-size: 42px; line-height: 1; background: #eef2fb; border: 1px solid #dde5f4; border-radius: 999px;">{{ rankEmoji }}</span>
+              <span style="font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">Kierros valmis! Tasosi on</span>
+              <span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em;">{{ rankTitle }}</span>
+            </div>
+            <div style="width: 100%; display: flex; align-items: stretch; justify-content: center;">
+              <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px; padding: 12px 8px;">
+                <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ resultScoreNum }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">pistettä</span>
+              </div>
+              <span style="width: 1px; margin: 12px 0; background: #ebe7de;"></span>
+              <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px; padding: 12px 8px;">
+                <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ statHitsValue }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">oikein</span>
+              </div>
+              <span style="width: 1px; margin: 12px 0; background: #ebe7de;"></span>
+              <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px; padding: 12px 8px;">
+                <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ statStreakValue }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">pisin putki</span>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardH }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 24px 22px 18px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 9px;">
+              <span style="width: 62px; height: 62px; display: flex; align-items: center; justify-content: center; font-size: 32px; line-height: 1; background: #f4f2ec; border-radius: 999px;">{{ rankEmoji }}</span>
+              <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">Kierros valmis! Tasosi on</span>
+              <span style="font-size: 22px; font-weight: 600; letter-spacing: -0.018em;">{{ rankTitle }}</span>
+            </div>
+            <div style="width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid #ebe7de;">
+              <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 8px;">
+                <span style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ resultScoreNum }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">pistettä</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 8px;">
+                <span style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ statHitsValue }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">oikein</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px 8px;">
+                <span style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ statStreakValue }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">pisin putki</span>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardI }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 28px 22px 22px; display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 11px;">
+              <span style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 40px; line-height: 1; background: #eef2fb; border: 1px solid #dde5f4; border-radius: 22px;">{{ rankEmoji }}</span>
+              <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #7f8ba5;">Kierros valmis! Tasosi on</span>
+              <span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em;">{{ rankTitle }}</span>
+            </div>
+            <div style="width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+              <div style="display: flex; flex-direction: column; gap: 5px; padding: 15px 10px; background: #eef2fb; border-radius: 8px;">
+                <span style="font-size: 23px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #1b2a4a;">{{ resultScoreNum }}</span>
+                <span style="font-size: 11.5px; font-weight: 600; color: #7f8ba5;">pistettä</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px; padding: 15px 10px; background: #f4f2ec; border-radius: 8px;">
+                <span style="font-size: 23px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #20201d;">{{ statHitsValue }}</span>
+                <span style="font-size: 11.5px; font-weight: 600; color: #918d83;">oikein</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px; padding: 15px 10px; background: #f8f2ea; border-radius: 8px;">
+                <span style="font-size: 23px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: #8a6636;">{{ statStreakValue }}</span>
+                <span style="font-size: 11.5px; font-weight: 600; color: #a58a63;">pisin putki</span>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardJ }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 34px 24px 26px; display: flex; flex-direction: column; gap: 26px; align-items: center; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+              <span style="font-size: 46px; line-height: 1;">{{ rankEmoji }}</span>
+              <span style="font-size: 28px; font-weight: 600; letter-spacing: -0.025em;">{{ rankTitle }}</span>
+              <span style="font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">Kierros valmis</span>
+            </div>
+            <div style="display: flex; align-items: stretch; gap: 26px;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ resultScoreNum }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">pistettä</span>
+              </div>
+              <span style="width: 1px; background: #ebe7de;"></span>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ statHitsValue }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">oikein</span>
+              </div>
+              <span style="width: 1px; background: #ebe7de;"></span>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;">{{ statStreakValue }}</span>
+                <span style="font-size: 11.5px; color: #918d83;">pisin putki</span>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ cardG }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 20px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1 1 180px; display: flex; align-items: center; gap: 13px;">
+              <span style="font-size: 34px; line-height: 1;">{{ rankEmoji }}</span>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">Kierros valmis!</span>
+                <span style="font-size: 20px; font-weight: 600; letter-spacing: -0.015em;">{{ rankTitle }}</span>
+              </div>
+            </div>
+            <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 7px; min-width: 168px;">
+              <div style="display: flex; justify-content: space-between; gap: 14px; font-size: 13px;">
+                <span style="color: #918d83;">Pisteet</span><span style="font-weight: 700; color: #20201d;">{{ resultScoreNum }}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; gap: 14px; font-size: 13px;">
+                <span style="color: #918d83;">Oikein</span><span style="font-weight: 600; color: #20201d;">{{ statHitsValue }}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; gap: 14px; font-size: 13px;">
+                <span style="color: #918d83;">Pisin putki</span><span style="font-weight: 600; color: #20201d;">{{ statStreakValue }}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; gap: 14px; font-size: 13px;">
+                <span style="color: #918d83;">Paras kerroin</span><span style="font-weight: 600; color: #20201d;">{{ statBestValue }}</span>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+
           <sc-if value="{{ hasMissed }}" hint-placeholder-val="{{ false }}">
-            <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
-              <div style="font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">Kertaa nämä</div>
-              <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+            <div style="background: #fffefb; border: 1px solid #dedad1; border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 11px;">
+              <div style="font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">Kertaa nämä</div>
+              <div style="display: flex; flex-wrap: wrap; align-content: flex-start; gap: 7px; max-height: 208px; overflow-y: auto; padding-right: 2px;">
                 <sc-for list="{{ missed }}" as="m" hint-placeholder-count="3">
-                  <span style="border: 1px solid #ebd5cc; background: #fbf1ed; color: #a5442a; padding: 6px 11px; border-radius: 999px; font-size: 14px; font-weight: 600;">{{ m.label }}</span>
+                  <button onClick="{{ m.click }}" style="border: 1px solid {{ m.bd }}; background: {{ m.bg }}; color: {{ m.fg }}; padding: 6px 11px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; outline: none; transition: border-color .15s ease, background .15s ease;" style-hover="border-color: #b23b28;">{{ m.label }}</button>
                 </sc-for>
               </div>
             </div>
           </sc-if>
 
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button onClick="{{ start }}" style="border: none; background: #20201d; color: #f6f4ef; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer;">Uusi kierros</button>
-            <button onClick="{{ quit }}" style="border: 1.5px solid #dedad1; background: transparent; color: #6b6a63; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer;" style-hover="border-color: #b8b2a5;">Vaihda pelimuotoa</button>
+            <button onClick="{{ start }}" style="border: none; background: #20201d; color: #f6f4ef; padding: 14px 22px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer;" style-hover="background: #3a3934;">Uusi kierros</button>
+            <button onClick="{{ quit }}" style="border: 1.5px solid #dedad1; background: transparent; color: #6b6a63; padding: 14px 22px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: pointer;" style-hover="border-color: #b8b2a5;">Takaisin etusivulle</button>
+          </div>
           </div>
         </div>
       </sc-if>
 
     </div>
   </div>
+
+  <sc-if value="{{ isPlay }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: rgba(252,250,246,.94); backdrop-filter: blur(8px); border-top: 1px solid #ddd8ce; box-shadow: 0 -6px 20px rgba(32,32,29,.09);">
+      <div style="height: 4px; background: #e6e2d9;">
+        <div style="height: 100%; width: {{ progressPct }}; background: #20201d;"></div>
+      </div>
+      <div style="height: 66px; padding: 0 26px; display: flex; align-items: center; justify-content: flex-end; gap: 16px;">
+        <span style="margin-right: auto; font-size: 14px; color: #6b6a63;">{{ scopeBarLabel }}</span>
+        <div data-popover="scoremenu" style="position: relative; display: flex; align-items: center;">
+          <button onClick="{{ toggleScoreMenu }}" title="Pisteiden näkyvyys" style="border: none; background: transparent; color: #a8a49a; font-family: 'Material Symbols Rounded'; font-size: 22px; line-height: 1; font-variation-settings: 'FILL' 0, 'wght' 400; padding: 4px 4px; border-radius: 8px; cursor: pointer;" style-hover="color: #57544d; background: #efece5;">more_vert</button>
+          <sc-if value="{{ scoreMenuOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; left: 0; bottom: 40px; z-index: 40; width: 232px; background: #fffefb; border: 1px solid #dedad1; border-radius: 12px; padding: 6px; box-shadow: 0 10px 28px rgba(32,32,29,.16); display: flex; flex-direction: column; gap: 2px; animation: hkiIn .18s ease-out;">
+              <button onClick="{{ pickShowScore }}" style="border: none; background: {{ showScoreBg }}; text-align: left; padding: 10px 12px; border-radius: 9px; cursor: pointer; display: flex; gap: 9px; align-items: center; font-size: 14px; font-weight: 600; color: #20201d;" style-hover="background: #f4f2ec;">
+                <span style="width: 14px; flex: 0 0 14px; font-size: 13px;">{{ showScoreCheck }}</span>
+                <span>Näytä pisteet</span>
+              </button>
+              <button onClick="{{ pickHideScore }}" style="border: none; background: {{ hideScoreBg }}; text-align: left; padding: 10px 12px; border-radius: 9px; cursor: pointer; display: flex; gap: 9px; align-items: center; font-size: 14px; font-weight: 600; color: #20201d;" style-hover="background: #f4f2ec;">
+                <span style="width: 14px; flex: 0 0 14px; font-size: 13px;">{{ hideScoreCheck }}</span>
+                <span>Piilota pisteet</span>
+              </button>
+            </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ showStreakChip }}" hint-placeholder-val="{{ false }}">
+          <span style="position: relative; height: 34px; display: flex; align-items: center; gap: 6px; padding: 0 13px 0 11px; background: #f8f2ea; border: 1px solid #e9ddcc; border-radius: 999px; font-size: 13px; font-weight: 600; color: #8a6636; white-space: nowrap; animation: hkiPop .45s cubic-bezier(.2,1.5,.4,1);">
+            <span style="font-size: 14px;">🔥</span>
+            <span>{{ streakLabel }}</span>
+            <sc-if value="{{ showBurst }}" hint-placeholder-val="{{ false }}">
+              <span style="position: absolute; left: 14px; bottom: 26px; pointer-events: none; font-size: 15px; animation: hkiFlameUp 2.2s ease-out forwards;">🔥</span>
+            </sc-if>
+            <sc-if value="{{ showBurst }}" hint-placeholder-val="{{ false }}">
+              <span style="position: absolute; left: 40px; bottom: 24px; pointer-events: none; font-size: 12px; animation: hkiFlameUp 2.5s ease-out .18s forwards; opacity: 0;">🔥</span>
+            </sc-if>
+          </span>
+        </sc-if>
+        <sc-if value="{{ scoreVisible }}" hint-placeholder-val="{{ true }}">
+        <div data-popover="rules" style="position: relative; margin-left: -10px; height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 13px; background: #eef2fb; border: 1px solid #d9e2f5; border-radius: 999px;">
+          <span style="font-family: inherit; font-size: 13px; font-weight: 600; color: #4a5c85;">Pisteet</span>
+          <span style="display: inline-block; font-size: 14px; font-weight: 700; line-height: 1; transform-origin: center; transform: {{ scoreTf }}; color: {{ scoreCol }}; transition: transform .3s cubic-bezier(.2,1.5,.4,1), color .35s ease;">{{ score }}</span>
+          <button onClick="{{ toggleRules }}" title="Pisteytys" style="border: none; background: transparent; padding: 2px; border-radius: 999px; cursor: pointer; display: flex; align-items: center; color: #7c8bab; font-family: 'Material Symbols Rounded'; font-size: 19px; line-height: 1; font-variation-settings: 'FILL' 0, 'wght' 300;" style-hover="color: #57544d;">info</button>
+          <sc-if value="{{ showPts }}" hint-placeholder-val="{{ false }}">
+            <span style="position: absolute; right: 34px; bottom: 30px; pointer-events: none; font-size: 17px; font-weight: 700; color: #1f7a3f; white-space: nowrap; animation: hkiPts 1.4s ease-out forwards;">{{ ptsLabel }}</span>
+          </sc-if>
+          <sc-if value="{{ rulesOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; right: 0; bottom: 46px; z-index: 40; width: 306px; background: #fffefb; border: 1px solid #dedad1; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 28px rgba(32,32,29,.16); display: flex; flex-direction: column; gap: 10px; animation: hkiIn .18s ease-out;">
+              <div style="font-family: inherit; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #918d83;">Näin pisteet kertyvät</div>
+              <div style="display: flex; gap: 10px; font-size: 14px; line-height: 1.5; color: #57544d;">
+                <span>🎯</span>
+                <span><strong style="color: #20201d;">Oikea katu:</strong> 10 p</span>
+              </div>
+              <div style="height: 1px; background: #edeae2;"></div>
+              <div style="display: flex; gap: 10px; font-size: 14px; line-height: 1.5; color: #57544d;">
+                <span>🔥</span>
+                <span><strong style="color: rgb(32, 32, 29);">Peräkkäiset osumat:</strong> nostavat kerrointa (max 3x)</span>
+              </div>
+              <div style="height: 1px; background: #edeae2;"></div>
+              <div style="display: flex; gap: 10px; font-size: 14px; line-height: 1.5; color: #57544d;">
+                <span>❌</span>
+                <span><strong style="color: #20201d;">Huti:</strong> nollaa kertoimen</span>
+              </div>
+              <div style="height: 1px; background: #edeae2;"></div>
+              <div style="font-size: 14px; line-height: 1.5; color: #918d83;">Putkessa nyt {{ streak }} · ennätys kaikilta kierroksilta {{ best }}</div>
+            </div>
+          </sc-if>
+        </div>
+        </sc-if>
+        <button onClick="{{ next }}" title="Enter" disabled="{{ nextOff }}" style="border: 1.5px solid {{ nextBd }}; background: {{ nextBg }}; color: {{ nextFg }}; padding: 12px 22px; border-radius: 11px; font-size: 14px; font-weight: 600; cursor: {{ nextCursor }}; white-space: nowrap;">{{ nextLabel }}</button>
+      </div>
+    </div>
+  </sc-if>
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:940},&quot;questionsPerRound&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:10,&quot;min&quot;:5,&quot;max&quot;:20,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Peli&quot;},&quot;distractorMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Lähikadut&quot;,&quot;Koko alue&quot;],&quot;default&quot;:&quot;Lähikadut&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Peli&quot;},&quot;showStreetNames&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Kartta&quot;},&quot;showLandmarks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Kartta&quot;},&quot;showParkNames&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Kartta&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#d8552f&quot;,&quot;options&quot;:[&quot;#e0361f&quot;,&quot;#1f5fe0&quot;,&quot;#0f8a5f&quot;,&quot;#7a2ee0&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Kartta&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:940},&quot;resultCard&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Mitalitaulu&quot;,&quot;Mitalitaulu · tiivis&quot;,&quot;Mitalitaulu · laatat&quot;,&quot;Mitalitaulu · kevyt&quot;,&quot;Korostettu&quot;,&quot;Tumma&quot;,&quot;Keskitetty&quot;,&quot;Keskitetty + chipit&quot;,&quot;Banneri&quot;,&quot;Kompakti&quot;],&quot;default&quot;:&quot;Mitalitaulu&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Tuloskortti&quot;},&quot;previewResult&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ei&quot;,&quot;Turisti&quot;,&quot;Kartanlukija&quot;,&quot;Vakaa paikallinen&quot;,&quot;Katumestari&quot;,&quot;Katukuningas&quot;],&quot;default&quot;:&quot;Ei&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Tuloskortti&quot;}}">
 const C = {
   land: '#f2efe9', sea: '#a9cfdd', water: '#a9cfdd', park: '#c9e1b6', pitch: '#b1e0a6', cem: '#aac7ae',
   bld: '#dcd3ca', bldEdge: '#c8bcb1', lmFill: '#e0c8a6', lmEdge: '#bfa073', pin: '#a8452c', pinT: '#4a7391', pinO: '#2f6b4f',
@@ -319,7 +706,7 @@ function lev(a, b) {
 function shuffle(a) { const r = a.slice(); for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = r[i]; r[i] = r[j]; r[j] = t; } return r; }
 
 class Component extends DCLogic {
-  state = { ready: false, screen: 'start', mode: 'mc', scope: 'Kaikki', queue: [], idx: 0, score: 0, streak: 0, correct: 0, missed: [], answered: null, input: '', hover: null, best: 0, uz: 1, px: 0, py: 0, owner: null, roundAll: false, party: false, menu: false };
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1200, ready: false, screen: 'start', mode: 'mc', scope: 'Kaikki', queue: [], idx: 0, score: 0, streak: 0, correct: 0, missed: [], answered: null, input: '', hover: null, best: 0, uz: 1, px: 0, py: 0, owner: null, roundAll: false, party: false, menu: false };
 
   componentDidMount() {
     this.tick();
@@ -335,8 +722,28 @@ class Component extends DCLogic {
     };
     window.addEventListener('keydown', this._onKeyWin);
     try { const b = parseInt(localStorage.getItem('hki-katuvisa-best') || '0', 10); if (b) this.setState({ best: b }); } catch (e) { }
+    this._onResize = () => {
+      const w = window.innerWidth;
+      if (w === this._lastW) return;
+      this._lastW = w;
+      const next = { vw: w };
+      if (w < 760 && (this.state.mode === 'find' || this.state.mode === 'type')) next.mode = 'mc';
+      this.setState(next);
+    };
+    window.addEventListener('resize', this._onResize);
+    this._onResize();
+    requestAnimationFrame(this._onResize);
+    setTimeout(this._onResize, 250);
+    setTimeout(this._onResize, 1000);
+    this._onDocDown = ev => {
+      if (!this.state.rules && !this.state.menu && !this.state.scoreMenu) return;
+      const t = ev.target;
+      const inPop = t && t.closest && t.closest('[data-popover]');
+      if (!inPop) this.setState({ rules: false, menu: false, scoreMenu: false });
+    };
+    document.addEventListener('mousedown', this._onDocDown, true);
   }
-  componentWillUnmount() { window.removeEventListener('keydown', this._onKeyWin); clearTimeout(this.timer); clearTimeout(this._tick); if (this._ro) this._ro.disconnect(); }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); document.removeEventListener('mousedown', this._onDocDown, true); window.removeEventListener('keydown', this._onKeyWin); clearTimeout(this.timer); clearTimeout(this._tick); if (this._ro) this._ro.disconnect(); }
   startTween(to) {
     this._tw = { from: { x: this.view.x, y: this.view.y, w: this.view.w, h: this.view.h }, to: to, t0: Date.now() };
   }
@@ -433,13 +840,14 @@ class Component extends DCLogic {
   accent() { return this.props.accentColor || '#1f5fe0'; }
 
   start = () => {
+    this.toTop();
     if (this.state.mode === 'study') {
       const q = this.names().slice().sort((a, b) => a.localeCompare(b, 'fi'));
       this.setState({ screen: 'study', queue: q, idx: 0, answered: null, hover: null, uz: 1, px: 0, py: 0 });
       return;
     }
     const q = shuffle(this.names()).slice(0, this.total());
-    this.setState({ screen: 'play', queue: q, idx: 0, score: 0, streak: 0, correct: 0, missed: [], answered: null, input: '', hover: null, uz: 1, px: 0, py: 0 });
+    this.setState({ screen: 'play', queue: q, idx: 0, score: 0, disp: 0, pop: false, roundBest: 0, streak: 0, correct: 0, missed: [], answered: null, input: '', hover: null, uz: 1, px: 0, py: 0 });
     this.focusAnswer();
   };
   prev = () => {
@@ -450,11 +858,42 @@ class Component extends DCLogic {
     const i = this.state.queue.indexOf(n);
     if (i >= 0) this.setState({ idx: i, uz: 1, px: 0, py: 0 });
   };
-  quit = () => this.setState({ screen: 'start', answered: null, hover: null });
+  rank(st) {
+    const p = st.queue.length ? st.correct / st.queue.length : 0;
+    if (p >= 1) return { emoji: '👑', title: 'Katukuningas', note: 'Täydet osumat. Keskusta on hallussa korttelin tarkkuudella.' };
+    if (p >= 0.85) return { emoji: '🧭', title: 'Katumestari', note: 'Melkein virheetön kierros — vain hiuksenhieno korjaus ja olet huipulla.' };
+    if (p >= 0.65) return { emoji: '🚶', title: 'Vakaa paikallinen', note: 'Löydät perille ilman karttaa. Muutama kortteli kaipaa vielä kertausta.' };
+    if (p >= 0.4) return { emoji: '🗺️', title: 'Kartanlukija', note: 'Suunta on oikea. Yksi kierros lisää ja nimet alkavat tarttua.' };
+    return { emoji: '🧳', title: 'Turisti', note: 'Kaikki alkaa jostain — kokeile harjoittelua ja tule takaisin.' };
+  }
+  bumpScore(from, to) {
+    clearTimeout(this._popT);
+    cancelAnimationFrame(this._scoreRaf);
+    this.setState({ disp: from, pop: true });
+    const t0 = Date.now(), dur = 620;
+    const step = () => {
+      const p = Math.min(1, (Date.now() - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      if (p < 1) {
+        this.setState({ disp: from + (to - from) * e });
+        this._scoreRaf = requestAnimationFrame(step);
+      } else this.setState({ disp: to });
+    };
+    this._scoreRaf = requestAnimationFrame(step);
+    this._popT = setTimeout(() => this.setState({ pop: false }), 700);
+    clearTimeout(this._burstT);
+    this.setState({ burst: true });
+    this._burstT = setTimeout(() => this.setState({ burst: false }), 2700);
+  }
+  toTop() { try { window.scrollTo(0, 0); if (document.scrollingElement) document.scrollingElement.scrollTop = 0; } catch (e) { } }
+  quit = () => { this.setState({ screen: 'start', answered: null, hover: null }); this.toTop(); };
   setMode = m => () => this.setState({ mode: m });
   setScope = s => () => this.setState({ scope: s, uz: 1, px: 0, py: 0 });
   setRoundAll = v => () => this.setState({ roundAll: v });
   toggleMenu = () => this.setState({ menu: !this.state.menu });
+  toggleRules = () => this.setState({ rules: !this.state.rules });
+  toggleScoreMenu = () => this.setState({ scoreMenu: !this.state.scoreMenu });
+  setHideScore = v => () => this.setState({ hideScore: v, scoreMenu: false });
   setParty = v => () => this.setState({ party: v, menu: false });
   zoomIn = () => this.setState({ owner: this.frameKey(), uz: Math.min(8, (this.state.owner === this.frameKey() ? this.state.uz : 1) * 1.6) });
   zoomOut = () => this.setState({ owner: this.frameKey(), uz: Math.max(0.14, (this.state.owner === this.frameKey() ? this.state.uz : 1) / 1.6) });
@@ -466,6 +905,7 @@ class Component extends DCLogic {
     this._moved = 0;
   };
   onMove = e => {
+    if (this._pinch) return;
     if (!this._drag || !this._rect) return;
     const view = this.viewBox();
     const k = view.w / this._rect.width;
@@ -476,9 +916,59 @@ class Component extends DCLogic {
   onUp = () => { this._drag = null; setTimeout(() => { this._moved = 0; }, 60); };
   setSvg = el => {
     if (el === this._svg) return;
-    if (this._svg) this._svg.removeEventListener('wheel', this.onWheel);
+    if (this._svg) {
+      this._svg.removeEventListener('wheel', this.onWheel);
+      this._svg.removeEventListener('touchstart', this.onTouchStart);
+      this._svg.removeEventListener('touchmove', this.onTouchMove);
+      this._svg.removeEventListener('touchend', this.onTouchEnd);
+      this._svg.removeEventListener('touchcancel', this.onTouchEnd);
+    }
     this._svg = el;
-    if (el) el.addEventListener('wheel', this.onWheel, { passive: false });
+    if (el) {
+      el.addEventListener('wheel', this.onWheel, { passive: false });
+      el.addEventListener('touchstart', this.onTouchStart, { passive: false });
+      el.addEventListener('touchmove', this.onTouchMove, { passive: false });
+      el.addEventListener('touchend', this.onTouchEnd);
+      el.addEventListener('touchcancel', this.onTouchEnd);
+    }
+  };
+  touchInfo(ev) {
+    const r = this._svg.getBoundingClientRect();
+    const a = ev.touches[0], b = ev.touches[1];
+    return {
+      dist: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY),
+      fx: ((a.clientX + b.clientX) / 2 - r.left) / r.width,
+      fy: ((a.clientY + b.clientY) / 2 - r.top) / r.height
+    };
+  }
+  onTouchStart = ev => {
+    if (ev.touches.length < 2) return;
+    ev.preventDefault();
+    this._drag = null;
+    this._moved = 99;
+    const t = this.touchInfo(ev), view = this.viewBox();
+    const mine = this.state.owner === this.frameKey();
+    this._pinch = { d0: t.dist, uz0: mine ? this.state.uz : 1, ux: view.x + t.fx * view.w, uy: view.y + t.fy * view.h };
+  };
+  onTouchMove = ev => {
+    if (!this._pinch || ev.touches.length < 2) return;
+    ev.preventDefault();
+    const t = this.touchInfo(ev);
+    if (!this._pinch.d0) return;
+    const uz = Math.min(8, Math.max(0.14, this._pinch.uz0 * (t.dist / this._pinch.d0)));
+    const base = this.scopeBox(), w = base.w / uz, h = base.h / uz;
+    this.setState({
+      owner: this.frameKey(), uz: uz,
+      px: (this._pinch.ux - (t.fx - 0.5) * w) - (base.x + base.w / 2),
+      py: (this._pinch.uy - (t.fy - 0.5) * h) - (base.y + base.h / 2)
+    });
+  };
+  onTouchEnd = ev => {
+    if (!ev.touches || ev.touches.length < 2) {
+      this._pinch = null;
+      this._drag = null;
+      setTimeout(() => { this._moved = 0; }, 120);
+    }
   };
   onWheel = ev => {
     ev.preventDefault();
@@ -518,18 +1008,30 @@ class Component extends DCLogic {
     if (!ok && !given) return;
     this._answeredAt = Date.now();
     const streak = ok ? this.state.streak + 1 : 0;
-    const pts = ok ? 10 + Math.min(streak - 1, 5) * 2 : 0;
+    const pts = ok ? 10 * Math.min(3, streak) : 0;
     const best = Math.max(this.state.best, streak);
+    const roundBest = Math.max(this.state.roundBest || 0, streak);
     if (best > this.state.best) { try { localStorage.setItem('hki-katuvisa-best', String(best)); } catch (e) { } }
+    const prevScore = this.state.score;
     this.setState({
-      answered: { ok: ok, given: given, pts: pts }, score: this.state.score + pts, streak: streak, best: best, uz: 1, px: 0, py: 0,
+      answered: { ok: ok, given: given, pts: pts }, score: this.state.score + pts, disp: this.state.score, streak: streak, best: best, roundBest: roundBest, uz: 1, px: 0, py: 0,
       correct: this.state.correct + (ok ? 1 : 0), missed: ok ? this.state.missed : this.state.missed.concat([t])
     });
+    clearTimeout(this._flashT);
+    this.setState({ flash: true });
+    this._flashT = setTimeout(() => this.setState({ flash: false }), 1800);
+    if (pts) this.bumpScore(prevScore, prevScore + pts);
   }
   next = () => {
     const i = this.state.idx + 1;
     if (this.state.screen === 'study') { this.setState({ idx: i % this.state.queue.length, uz: 1, px: 0, py: 0 }); return; }
-    if (i >= this.state.queue.length) this.setState({ screen: 'result', answered: null, hover: null });
+    if (i >= this.state.queue.length) {
+      const total = this.state.score;
+      this.setState({ screen: 'result', answered: null, hover: null, meter: false, focus: null });
+      this.bumpScore(0, total);
+      clearTimeout(this._meterT);
+      this._meterT = setTimeout(() => this.setState({ meter: true }), 120);
+    }
     else { this.setState({ idx: i, answered: null, input: '', hover: null, uz: 1, px: 0, py: 0 }); this.focusAnswer(); }
   };
   focusAnswer() {
@@ -560,6 +1062,10 @@ class Component extends DCLogic {
 
   scopeBox() {
     const st = this.state, W = this.W, H = this.H;
+    if (st.screen === 'result') {
+      const rs = (st.queue || []).filter(n => n && this.street[n]);
+      if (rs.length) return this.fitBox(rs.map(n => this.street[n].bx), 0.12, 340);
+    }
     const t = (st.screen === 'play' || st.screen === 'study') ? st.queue[st.idx] : null;
     const frame = t && this.street[t] && (st.screen === 'study' || st.mode === 'mc' || st.mode === 'type' || !!st.answered);
     if (frame) return this.fitBox([this.street[t].bx], 0.5, 340);
@@ -661,8 +1167,20 @@ class Component extends DCLogic {
       k.push(e('path', { key: 'hi', d: this.street[target].d, fill: 'none', stroke: A, strokeWidth: u(8.5), strokeLinecap: 'round' }));
     }
     if (wrongPick && this.street[wrongPick]) k.push(e('path', { key: 'wr', d: this.street[wrongPick].d, fill: 'none', stroke: C.bad, strokeWidth: u(8), strokeLinecap: 'round', strokeDasharray: u(15) + ' ' + u(11) }));
+    if (st.screen === 'result') {
+      const miss = st.missed || [];
+      (st.queue || []).forEach((n, i) => {
+        if (!n || !this.street[n]) return;
+        const bad = miss.indexOf(n) >= 0;
+        k.push(e('path', { key: 'rq' + i, d: this.street[n].d, fill: 'none', stroke: bad ? C.bad : C.ok, strokeWidth: u(7), strokeLinecap: 'round', opacity: bad ? 0.9 : 0.8 }));
+      });
+      if (st.focus && this.street[st.focus]) {
+        k.push(e('path', { key: 'fch', d: this.street[st.focus].d, fill: 'none', stroke: C.bad, strokeWidth: u(30), strokeLinecap: 'round', opacity: 0.2, style: { animation: 'hkiPulse 1.8s ease-in-out infinite' } }));
+        k.push(e('path', { key: 'fc', d: this.street[st.focus].d, fill: 'none', stroke: C.bad, strokeWidth: u(11), strokeLinecap: 'round' }));
+      }
+    }
     if (reveal) {
-      const col = isStudy ? A : C.ok;
+      const col = isStudy ? A : (st.answered && st.answered.ok ? C.ok : '#46536b');
       if (isStudy) k.push(e('path', { key: 'rvh', d: this.street[reveal].d, fill: 'none', stroke: A, strokeWidth: u(28), strokeLinecap: 'round', opacity: 0.22 }));
       k.push(e('path', { key: 'rv', d: this.street[reveal].d, fill: 'none', stroke: col, strokeWidth: u(9), strokeLinecap: 'round' }));
     }
@@ -712,6 +1230,13 @@ class Component extends DCLogic {
       k.push(e('circle', { key: 'oq' + i, cx: l.x, cy: l.y, r: u(1.8), fill: '#ffffff' }));
     });
 
+    if (st.screen === 'result' && st.focus && this.street[st.focus]) {
+      const fs = this.street[st.focus];
+      k.push(e('text', {
+        key: 'fct', x: fs.lx, y: fs.ly - u(17), fill: '#7a2a1c', fontSize: u(19), fontWeight: 600, textAnchor: 'middle',
+        stroke: '#ffffff', strokeWidth: u(8), paintOrder: 'stroke'
+      }, st.focus));
+    }
     if (reveal) {
       const rs = this.street[reveal];
       k.push(e('text', {
@@ -730,8 +1255,21 @@ class Component extends DCLogic {
     return e('svg', { viewBox: box.x.toFixed(1) + ' ' + box.y.toFixed(1) + ' ' + box.w.toFixed(1) + ' ' + box.h.toFixed(1), width: '100%', height: '100%', preserveAspectRatio: 'xMidYMid slice', onPointerDown: this.onDown, onPointerMove: this.onMove, onPointerUp: this.onUp, onPointerCancel: this.onUp, ref: this.setSvg, style: { display: 'block', touchAction: 'none', cursor: 'grab', userSelect: 'none', WebkitUserSelect: 'none' } }, k);
   }
 
+  previewState() {
+    const pv = this.props.previewResult;
+    if (!pv || pv === 'Ei') return null;
+    const map = { 'Turisti': [2, 1], 'Kartanlukija': [5, 2], 'Vakaa paikallinen': [7, 3], 'Katumestari': [9, 5], 'Katukuningas': [10, 10] };
+    const m = map[pv] || map['Vakaa paikallinen'];
+    const correct = m[0], roundBest = m[1];
+    const missed = ['Kalevankatu', 'Ratakatu', 'Vuorimiehenkatu'].slice(0, Math.max(0, Math.min(3, 10 - correct)));
+    return Object.assign({}, this.state, {
+      screen: 'result', answered: null, meter: true, pop: false,
+      queue: new Array(10).fill(''), correct: correct, roundBest: roundBest, missed: missed,
+      score: correct * 10 + roundBest * 10, streak: roundBest
+    });
+  }
   renderVals() {
-    const st = this.state, A = this.accent();
+    const st = this.previewState() || this.state, A = this.accent();
     const modeBg = m => (st.mode === m ? '#eff3fd' : '#fffefb');
     const modeBd = m => (st.mode === m ? A : '#dedad1');
     const target = st.queue[st.idx] || '';
@@ -762,17 +1300,21 @@ class Component extends DCLogic {
       fact: (st.party ? (window.HKI_PARTY_FACTS && window.HKI_PARTY_FACTS[target]) : (window.HKI_FACTS && window.HKI_FACTS[target])) || '',
       hasFact: !!(st.party ? (window.HKI_PARTY_FACTS && window.HKI_PARTY_FACTS[target]) : (window.HKI_FACTS && window.HKI_FACTS[target])),
       menuOpen: st.menu, toggleMenu: this.toggleMenu,
+      rulesOpen: !!st.rules, toggleRules: this.toggleRules,
       pickDefaultMode: this.setParty(false), pickUrbanMode: this.setParty(true),
       defCheck: st.party ? '' : '✓', urbCheck: st.party ? '✓' : '',
       defBg: st.party ? 'transparent' : '#f4f2ec', urbBg: st.party ? '#eff3fd' : 'transparent',
       defFg: '#20201d', urbFg: st.party ? '#20201d' : '#20201d',
-      eyebrow: st.party ? 'Helsinki by night' : 'Helsingin ydinkeskusta',
+      eyebrow: st.party ? 'Katuvisa · Helsinki by night' : 'Katuvisa',
       zoomIn: this.zoomIn, zoomOut: this.zoomOut, zoomReset: this.zoomReset,
       zoomLabel: (Math.round((st.owner === this.frameKey() ? st.uz : 1) * 100) / 100) + '×',
       zoomOutColor: '#3a3934',
       zoomInColor: '#3a3934',
       isZoomed: st.owner === this.frameKey() && Math.abs(st.uz - 1) > 0.01,
-      score: st.score, streak: st.streak, best: st.best,
+      score: st.pop && typeof st.disp === 'number' ? Math.round(st.disp) : st.score,
+      scoreTf: st.pop ? 'scale(1.32)' : 'scale(1)',
+      scoreCol: st.pop ? '#1f7a3f' : '#1b2a4a',
+      streak: st.streak, best: st.best,
       mcBg: modeBg('mc'), mcBd: modeBd('mc'), typeBg: modeBg('type'), typeBd: modeBd('type'), findBg: modeBg('find'), findBd: modeBd('find'),
       pickMc: this.setMode('mc'), pickType: this.setMode('type'), pickFind: this.setMode('find'),
       scopes: scopeList.map(s => ({
@@ -781,6 +1323,45 @@ class Component extends DCLogic {
       })),
       scopeInfo: nCount + ' katua valittuna · kierros ' + (this.street ? this.total() : 0) + ' kysymystä',
       scopeName: st.scope,
+      scopeLabelTop: st.screen === 'start' ? '' : st.scope,
+      showScore: st.screen === 'play' || st.screen === 'result',
+      showMap: st.screen !== 'result',
+      panelFlex: st.screen === 'result' ? '1 1 100%' : '0 1 358px',
+      panelMax: 'none',
+      cardA: this.props.resultCard === 'Korostettu',
+      cardB: this.props.resultCard === 'Tumma',
+      cardC: this.props.resultCard === 'Keskitetty',
+      cardD: this.props.resultCard === 'Keskitetty + chipit',
+      cardE: this.props.resultCard === 'Banneri',
+      cardF: (this.props.resultCard || 'Mitalitaulu') === 'Mitalitaulu',
+      cardG: this.props.resultCard === 'Kompakti',
+      cardH: this.props.resultCard === 'Mitalitaulu · tiivis',
+      cardI: this.props.resultCard === 'Mitalitaulu · laatat',
+      cardJ: this.props.resultCard === 'Mitalitaulu · kevyt',
+      resultAreaLine: nCount + ' katua · ' + st.queue.length + ' kysymystä',
+      scoreVisible: st.hideScore !== true,
+      showStreakChip: st.streak >= 2 && st.hideScore !== true,
+      scoreMenuOpen: !!st.scoreMenu, toggleScoreMenu: this.toggleScoreMenu,
+      pickShowScore: this.setHideScore(false), pickHideScore: this.setHideScore(true),
+      showScoreCheck: st.hideScore ? '' : '✓', hideScoreCheck: st.hideScore ? '✓' : '',
+      showScoreBg: st.hideScore ? 'transparent' : '#f4f2ec', hideScoreBg: st.hideScore ? '#f4f2ec' : 'transparent',
+      showStreak: st.streak >= 2,
+      showBurst: !!(st.burst && st.streak >= 2),
+      showFlash: !!(st.flash && ans),
+      streakLabel: Math.min(3, st.streak) + 'x kerroin',
+      headerRows: '34px auto auto',
+      headerMt: '0',
+      modeTitle: st.scope === 'Kaikki' ? 'Helsingin ydinkeskusta' : st.scope,
+      scopeBarLabel: st.scope === 'Kaikki' ? 'Koko ydinkeskusta' : st.scope,
+      showAllModes: st.vw >= 760,
+      headerCols: st.vw >= 760 ? 'minmax(240px, 1fr) 358px' : 'minmax(0, 1fr) minmax(0, auto)',
+      inGame: st.screen !== 'start',
+      showEyebrow: st.screen === 'start',
+      statusLeft: st.screen === 'study' ? ('Harjoittelu · ' + (st.idx + 1) + ' / ' + st.queue.length)
+        : ' ',
+      statusRight: st.screen === 'study' ? st.scope : ' ',
+      barTrack: st.screen === 'play' ? '#e6e2d9' : 'transparent',
+      zoomTop: ans ? '80px' : '12px',
       start: this.start, quit: this.quit, next: this.next,
       progressLabel: 'Kysymys ' + (st.idx + 1) + ' / ' + st.queue.length,
       progressPct: st.queue.length ? Math.round((st.idx + (ans ? 1 : 0)) / st.queue.length * 100) + '%' : '0%',
@@ -793,17 +1374,59 @@ class Component extends DCLogic {
           else if (o === ans.given) { bg = '#fdf0ee'; bd = C.bad; fg = '#9e3524'; }
           else { fg = '#a8a49a'; }
         }
-        return { label: o, click: () => this.answer(o), bg: bg, bd: bd, fg: fg, cursor: ans ? 'default' : 'pointer' };
+        const isRight = !!ans && o === target, isWrongPick = !!ans && o !== target && o === ans.given;
+        return {
+          hasTag: isRight || isWrongPick,
+          tag: isRight ? 'Oikein' : 'Väärin',
+          tagFg: isRight ? '#245c34' : '#9e3524',
+          tagBg: isRight ? '#e3eee5' : '#f8e3de',
+          tagBd: isRight ? '#c6ddc9' : '#eecdc4',
+          label: o,
+          click: ev => { try { if (ev && ev.currentTarget && ev.currentTarget.blur) ev.currentTarget.blur(); } catch (e) { } this.answer(o); },
+          bg: bg, bd: bd, fg: fg, cursor: ans ? 'default' : 'pointer'
+        };
       }),
       input: st.input, onInput: this.onInput, onKey: this.onKey, submit: this.submit,
       answered: !!ans,
-      verdict: ans ? (ans.ok ? 'Oikein! +' + ans.pts : 'Väärin') : '',
+      showPts: !!(ans && ans.ok && ans.pts),
+      ptsLabel: ans && ans.pts ? '+' + ans.pts : '',
+      submitBg: ans ? 'transparent' : C.ink,
+      submitBd: ans ? '#e2ded5' : C.ink,
+      submitFg: ans ? '#b5b1a7' : '#f6f4ef',
+      submitCursor: ans ? 'default' : 'pointer',
+      verdict: ans ? (ans.ok ? 'Oikein!' : 'Väärin!') : '',
       verdictColor: ans && ans.ok ? C.ok : C.bad,
-      verdictNote: ans ? (ans.ok ? (st.mode === 'find' ? target + ' löytyi.' : 'Katu on ' + target + '.') : 'Oikea vastaus: ' + target + ' — se on korostettu kartalla vihreällä.') : '',
+      verdictBg: ans && ans.ok ? 'rgba(238,244,238,.95)' : 'rgba(251,241,237,.95)',
+      verdictBd: ans && ans.ok ? '#cfe2d0' : '#eed6cd',
+      verdictIcon: ans && ans.ok ? 'check_circle' : 'error',
+      isTypeWrong: !!(st.mode === 'type' && ans && !ans.ok),
+      isTypeVerdict: !!((st.mode === 'type' || st.mode === 'find') && ans),
+      typeVerdictLine: ans && !ans.ok ? 'Väärin! Oikea vastaus: ' + target : '',
+      verdictNote: ans ? (ans.ok ? (target + '\u2002+' + ans.pts + ' pistettä') : ('Oikea vastaus: ' + target)) : '',
       nextLabel: st.idx + 1 >= st.queue.length ? 'Näytä tulos' : 'Seuraava katu',
+      nextOff: !ans,
+      nextBg: ans ? C.ink : 'transparent',
+      nextBd: ans ? C.ink : '#e2ded5',
+      nextFg: ans ? '#f6f4ef' : '#b5b1a7',
+      nextCursor: ans ? 'pointer' : 'default',
       resultScore: st.score + ' pistettä',
+      resultScoreNum: st.pop && typeof st.disp === 'number' ? Math.round(st.disp) : st.score,
+      accuracyPct: st.meter === false ? '0%' : (st.queue.length ? Math.round(st.correct / st.queue.length * 100) : 0) + '%',
+      accuracyLabel: (st.queue.length ? Math.round(st.correct / st.queue.length * 100) : 0) + ' % oikein',
+      statHitsValue: st.correct + ' / ' + st.queue.length,
+      statStreakValue: String(st.roundBest || 0),
+      statBestValue: Math.max(1, Math.min(3, st.roundBest || 0)) + 'x',
+      statHits: 'Oikein ' + st.correct + ' / ' + st.queue.length,
+      statStreak: 'Pisin putki ' + (st.roundBest || 0),
+      statBest: 'Paras kerroin ' + Math.max(1, Math.min(3, st.roundBest || 0)) + 'x',
+      rankEmoji: this.rank(st).emoji,
+      rankTitle: this.rank(st).title,
+      rankNote: this.rank(st).note,
       resultSub: st.correct + ' / ' + st.queue.length + ' oikein · pisin putki ' + st.best,
-      missed: st.missed.map(m => ({ label: m })),
+      missed: st.missed.map(m => ({
+        label: m, click: () => this.setState({ focus: this.state.focus === m ? null : m }),
+        bg: st.focus === m ? '#b23b28' : '#fbf1ed', bd: st.focus === m ? '#b23b28' : '#ebd5cc', fg: st.focus === m ? '#fffefb' : '#a5442a'
+      })),
       hasMissed: st.missed.length > 0
     };
   }

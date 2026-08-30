@@ -8,7 +8,7 @@ window.HKI_FACTS = {
 "Keskuskatu": "Kävelykatu, jolla on kaksi Alvar Aallon taloa: Rautatalo marmorisen sisäpihakahvilan kanssa ja Kirjatalo, jossa on Akateeminen kirjakauppa.",
 "Mikonkatu": "Ruotsiksi Mikaelsgatan. Kapea oikotie asemalta Esplanadille, ja Kämp Galleria avautuu kadun kulmasta.",
 "Kluuvikatu": "Kluuvi tarkoittaa umpeen kasvanutta merenlahtea — täällä oli ennen vettä. Nyt katu on kauppojen ja kauppakeskuksen reunustama.",
-"Vuorikatu": "Nimi lupaa vuorta, mutta maasto on tasaista: Kluuvin lahti täytettiin maalla 1800-luvulla. Rauhallinen oikotie Kaisaniemen suuntaan.",
+"Vuorikatu": "Nimi tulee kadun pohjoispäässä kohoavasta kallioselänteestä — mäki jyrkkenee Kaisaniemen suuntaan. Rauhallinen oikotie Kluuvin ja Kaisaniemen välillä.",
 "Vilhonkatu": "Rautatientorin pohjoislaidan pikkukatu, josta lähtee reitti Kaisaniemen puistoon ja kasvitieteelliseen puutarhaan.",
 "Yliopistonkatu": "Nimi kertoo naapureista: Helsingin yliopiston päärakennus ja Porthania ovat kadun molemmin puolin, ja lounasaikaan katu on täynnä opiskelijoita.",
 "Kaisaniemenkatu": "Kaisaniemi on nimetty ravintoloitsija Cajsa Wahllundin mukaan, joka piti alueella suosittua ravintolaa 1800-luvun alussa.",
