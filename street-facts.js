@@ -74,6 +74,7 @@ window.HKI_FACTS = {
 "Salomonkatu": "Kampin keskuksen ja Narinkkatorin kylkeä kulkeva katu — kaupungin vilkkain vaihtopaikka bussista metroon.",
 "Hietalahdenranta": "Täällä on Hietalahden kirpputori, Helsingin tunnetuin, ja kauppahalli, joka on nykyään täynnä ravintoloita.",
 "Lapinlahdenkatu": "Johtaa Lapinlahteen, jossa vanha mielisairaala toimii nyt kulttuuri- ja hyvinvointikeskuksena: kahvila, sauna ja meri vieressä.",
+"Sepänkatu": "Nimi muistuttaa Hietalahden telakan seppien korttelista. Nykyään katu on Punavuoren rauhallinen selkäranka — ja numerossa 11 sijaitsee Punavuoren Patina.",
 "Runeberginkatu": "Kansallisrunoilija J. L. Runebergin mukaan — sama mies, jonka nimeä kantaa myös helmikuun torttu.",
 "Arkadiankatu": "Nimi juontaa vanhasta Arkadia-teatterista. Kadun päässä on Eduskuntatalo ja sen 1930-luvun pylväikkö.",
 "Museokatu": "Nimi tulee Kansallismuseosta, jonka torni kohoaa kadun itäpäässä. Museon eteinen on Gallen-Kallelan freskojen peitossa.",
