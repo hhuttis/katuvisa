@@ -7,12 +7,15 @@ toimii lentokonetilassa ja päivittyy ilman sovelluskauppaa.
 ---
 
 
-## 1. Lisää puhelimen aloitusnäytölle
+## 1. Käyttö puhelimella ja lisääminen  aloitusnäytölle
+
+Avaa puhelimella linkki: https://hhuttis.github.io/katuvisa/
 
 - **iPhone (Safari):** avaa osoite → jakonappi → **Lisää Koti-valikkoon**
 - **Android (Chrome):** avaa osoite → ⋮ → **Lisää aloitusnäyttöön**
 
-Ensimmäisen avauksen jälkeen peli toimii myös ilman verkkoyhteyttä.
+Ensimmäisen avauksen jälkeen peli toimii myös ilman verkkoyhteyttä. 
+Puhelimella ominaisuudet ovat rajoitetummat kuin tietokoneella. 
 
 ---
 
