@@ -1,4 +1,4 @@
-# Katuvisa — julkaisuohje
+# Katuvisa — ohjeet
 
 Sovellus on **PWA** (progressive web app): tavallinen verkkosivu, jonka voi
 lisätä puhelimen aloitusnäytölle. Se avautuu kuin sovellus ilman selainpalkkia,
