@@ -5,7 +5,7 @@ window.HKI_FACTS = {
 "Eteläesplanadi": "Esplanadin puiston eteläreuna. Länsipäässä Svenska Teatern, ja kesällä Espan lavalla soi ilmaista musiikkia keskellä työpäivää.",
 "Mannerheimintie": "Helsingin pisin katu, vuoteen 1942 Heikinkatu. Varrella Kiasma, Musiikkitalo ja Oodi — ja Stockmannin kello, klassinen \"nähdään kellon alla\" -tapaamispaikka.",
 "Kaivokatu": "Päärautatieaseman edusta. Aseman ovia vahtivat Emil Wikströnin Lyhdynkantajat eli kivimiehet, joita helsinkiläiset kutsuvat aseman kivimiehiksi.",
-"Keskuskatu": "Kävelykatu, jolla on kaksi Alvar Aallon taloa: Rautatalo marmorisen sisäpihakahvilan kanssa ja Kirjatalo, jossa on Akateeminen kirjakauppa.",
+"Keskuskatu": "Kävelykatu, jolla on kaksi Alvar Aallon taloa: Rautatalo marmorisen sisäpihakahvilan kanssa ja Kirjatalo, jossa on Akateeminen kirjakauppa. Katukiveys on ladottu geometrisenä tessellaationa, jossa toistuva kuvio peittää koko pinnan saumatta ja jättämättä aukkoja.",
 "Mikonkatu": "Ruotsiksi Mikaelsgatan. Kapea oikotie asemalta Esplanadille, ja Kämp Galleria avautuu kadun kulmasta.",
 "Kluuvikatu": "Kluuvi tarkoittaa umpeen kasvanutta merenlahtea — täällä oli ennen vettä. Nyt katu on kauppojen ja kauppakeskuksen reunustama.",
 "Vuorikatu": "Nimi tulee kadun pohjoispäässä kohoavasta kallioselänteestä — mäki jyrkkenee Kaisaniemen suuntaan. Rauhallinen oikotie Kluuvin ja Kaisaniemen välillä.",
