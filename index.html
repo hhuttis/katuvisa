@@ -2,27 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Katuvisa — Helsingin kadut</title>
-<meta name="description" content="Opi Helsingin keskustan kadut, maamerkit ja menomestat karttavisan avulla.">
-<meta name="theme-color" content="#f6f4ef">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Katuvisa">
-<meta name="mobile-web-app-capable" content="yes">
-<script src="./vendor/react.production.min.js"></script>
-<script src="./vendor/react-dom.production.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('./sw.js').catch(function () {});
-    });
-  }
-</script>
-
 </head>
 <body>
 <x-dc>
@@ -826,6 +807,7 @@ class Component extends DCLogic {
     this.classPaths = classPaths;
     this.bldPath = toPath(D.B, true);
     this.seaPath = D.SEA.join('');
+    this.landFixPath = D.LANDFIX ? D.LANDFIX.join('') : '';
     this.waterPath = D.WATER.map(w => toPath(w.d, true)).join('');
     this.greenPaths = { g: '', p: '', c: '' };
     this.greenLabels = [];
@@ -1174,6 +1156,7 @@ class Component extends DCLogic {
       k.push(e('path', { key: 'xra', d: this.ctx.ra, fill: 'none', stroke: '#f0d9b0', strokeWidth: u(9), strokeLinecap: 'round' }));
     }
     if (this.seaPath) k.push(e('path', { key: 'sea', d: this.seaPath, fill: C.sea }));
+    if (this.landFixPath) k.push(e('path', { key: 'lfix', d: this.landFixPath, fill: C.land }));
     if (this.waterPath) k.push(e('path', { key: 'wat', d: this.waterPath, fill: C.water }));
     if (this.greenPaths.c) k.push(e('path', { key: 'gc', d: this.greenPaths.c, fill: C.cem }));
     if (this.greenPaths.g) k.push(e('path', { key: 'gg', d: this.greenPaths.g, fill: C.park }));
@@ -1211,7 +1194,7 @@ class Component extends DCLogic {
 
     const labels = [];
     if (this.props.showLandmarks !== false) this.lm.filter(l => l.k === 'o').forEach(l => {
-      labels.push({ kind: 'lm', n: l.n, x: l.x, y: l.y + u(15), size: u(10.5), k: 'o' });
+      labels.push({ kind: 'lm', n: l.n, x: l.x, y: l.y + u(12), size: u(9.5), k: 'o' });
       labels.push({ kind: 'guard', n: 'xxx', x: l.x, y: l.y - u(2), size: u(11) });
     });
     this.areas.forEach(a => labels.push({ kind: 'area', n: a.n, x: a.x, y: a.y, size: u(13) }));
@@ -1243,15 +1226,15 @@ class Component extends DCLogic {
 
     shown.forEach((l, i) => {
       if (l.kind === 'area') k.push(e('text', { key: 'la' + i, x: l.x, y: l.y, fill: '#928a7e', fontSize: l.size, fontWeight: 600, letterSpacing: u(0.9), textAnchor: 'middle', stroke: C.land, strokeWidth: u(5), paintOrder: 'stroke', opacity: 0.95 }, l.n));
-      else if (l.kind === 'lm') k.push(e('text', { key: 'll' + i, x: l.x, y: l.y, fill: l.k === 'o' ? '#245439' : (l.k === 't' ? '#3d6480' : '#8d3b25'), fontSize: l.size, fontWeight: l.k === 'o' ? 600 : 500, textAnchor: 'middle', stroke: '#ffffff', strokeWidth: u(3.4), paintOrder: 'stroke' }, l.n));
+      else if (l.kind === 'lm') k.push(e('text', { key: 'll' + i, x: l.x, y: l.y, fill: l.k === 't' ? '#3d6480' : '#8d3b25', fontSize: l.size, fontWeight: 500, textAnchor: 'middle', stroke: '#ffffff', strokeWidth: u(3.4), paintOrder: 'stroke' }, l.n));
       else if (l.kind === 'park') k.push(e('text', { key: 'lp' + i, x: l.x, y: l.y, fill: '#456f3a', fontSize: l.size, fontWeight: 500, textAnchor: 'middle', stroke: '#ffffff', strokeWidth: u(3.2), paintOrder: 'stroke' }, l.n));
       else if (l.kind === 'night') k.push(e('text', { key: 'ln' + i, x: l.x, y: l.y, fill: '#98156b', fontSize: l.size, fontWeight: 500, textAnchor: 'middle', stroke: '#ffffff', strokeWidth: u(3.2), paintOrder: 'stroke' }, l.n));
       else k.push(e('text', { key: 'ls' + i, x: l.x, y: l.y, fill: '#615c53', fontSize: l.size, fontWeight: 500, textAnchor: 'middle', stroke: '#ffffff', strokeWidth: u(3.6), paintOrder: 'stroke' }, l.n));
     });
 
     if (this.props.showLandmarks !== false) this.lm.filter(l => l.k === 'o').forEach((l, i) => {
-      k.push(e('circle', { key: 'op' + i, cx: l.x, cy: l.y, r: u(5.2), fill: C.pinO, stroke: '#ffffff', strokeWidth: u(1.8) }));
-      k.push(e('circle', { key: 'oq' + i, cx: l.x, cy: l.y, r: u(1.8), fill: '#ffffff' }));
+      k.push(e('circle', { key: 'op' + i, cx: l.x, cy: l.y, r: u(4.6), fill: C.pin, stroke: '#ffffff', strokeWidth: u(1.4) }));
+      k.push(e('circle', { key: 'oq' + i, cx: l.x, cy: l.y, r: u(1.6), fill: '#ffffff' }));
     });
 
     if (st.screen === 'result' && st.focus && this.street[st.focus]) {
