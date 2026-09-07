@@ -30,17 +30,6 @@ yhteyttä ei ole, joten uusi versio tulee käyttöön seuraavalla avauksella. Jo
 vanha versio jää jumiin: sulje sovellus kokonaan (pyyhkäise pois
 tehtävänvaihtajasta) ja avaa uudelleen.
 
-Jos teet Claude Designissa kokonaan uuden version, vie se uudelleen ja korvaa
-`index.html` sekä muuttuneet `*.js`-tiedostot GitHubissa
-(**Add file → Upload files**, sama tiedostonimi korvaa vanhan).
-
-> Huom: Claude Design vie päätiedoston nimellä `Katuvisa.dc.html`. Nimeä se
-> uudelleen muotoon `index.html` ennen kuin lataat sen GitHubiin — muuten
-> selain ei löydä sitä automaattisesti. Lisää myös uudelleen ne rivit, jotka
-> tässä versiossa on lisätty `<head>`-osioon (manifest, ikonit, `vendor`-skriptit
-> ja service workerin rekisteröinti); helpointa on kopioida vanhan `index.html`:n
-> `<head>` uuteen tiedostoon.
-
 ---
 
 ## Tiedostot
@@ -64,8 +53,7 @@ Kaikkien pitää olla samassa kansiossa, `vendor`-kansio omanaan. Älä nimeä u
 ## Lähteet
 
 Kartta-aineisto on **OpenStreetMapista** (ODbL). Maininta näkyy kartan
-vasemmassa alakulmassa — pidä se paikallaan, jos julkaiset sovelluksen
-laajemmin.
+vasemmassa alakulmassa.
 
 ## Tallennus
 
