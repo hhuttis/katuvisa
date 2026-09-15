@@ -1,61 +1,71 @@
-# Katuvisa — ohjeet
+# Katuvisa — Helsingin kadut
 
-Sovellus on **PWA** (progressive web app): tavallinen verkkosivu, jonka voi
-lisätä puhelimen aloitusnäytölle. Se avautuu kuin sovellus ilman selainpalkkia,
-toimii lentokonetilassa ja päivittyy ilman sovelluskauppaa.
+## Miten tämä on rakennettu
 
----
+`index.html` on **pysyvä kuoritiedosto**. Se sisältää kaiken PWA-tekniikan
+(nimi, ikonit, offline-tuki) ja avaa sisäänsä varsinaisen pelin. Peli itse on
+`Katuvisa.dc.html`, joka on Claude Designin vienti sellaisenaan.
 
-
-## 1. Käyttö puhelimella ja lisääminen  aloitusnäytölle
-
-Avaa puhelimella linkki: https://hhuttis.github.io/katuvisa/
-
-- **iPhone (Safari):** avaa osoite → jakonappi → **Lisää Koti-valikkoon**
-- **Android (Chrome):** avaa osoite → ⋮ → **Lisää aloitusnäyttöön**
-
-Ensimmäisen avauksen jälkeen peli toimii myös ilman verkkoyhteyttä. 
-Puhelimella ominaisuudet ovat rajoitetummat kuin tietokoneella. 
+Tämä tarkoittaa, että **et koskaan enää nimeä mitään uudelleen etkä liitä
+metatietoja käsin**. Juuri se askel meni aiemmin pieleen.
 
 ---
 
-## 2. Päivittäminen
+## Päivittäminen — kolme askelta
 
-1. Mene GitHubissa repositoryyn ja klikkaa muokattavaa tiedostoa
-2. Kynäkuvake (**Edit this file**) → tee muutokset → **Commit changes**
-3. Odota noin minuutti ja avaa sovellus puhelimessa verkkoyhteyden kanssa
+1. Vie peli Claude Designista.
+2. GitHubissa **Add file** → **Upload files** → raahaa viedyt tiedostot
+   (`Katuvisa.dc.html`, `support.js` ja kaikki `.js`-datatiedostot).
+3. **Commit changes**. Odota minuutti ja avaa sovellus.
 
-Sovellus hakee tiedostot aina ensin verkosta ja käyttää välimuistia vain jos
-yhteyttä ei ole, joten uusi versio tulee käyttöön seuraavalla avauksella. Jos
-vanha versio jää jumiin: sulje sovellus kokonaan (pyyhkäise pois
-tehtävänvaihtajasta) ja avaa uudelleen.
+Älä nimeä mitään uudelleen. Samannimiset tiedostot korvaavat vanhat
+automaattisesti.
+
+`index.html`, `sw.js`, `manifest.webmanifest` ja ikonit pysyvät ennallaan —
+niitä ei tarvitse viedä uudelleen koskaan.
+
+Uusien alueiden lisääminen ei vaadi mitään erikoistoimia: raahaa vain uudet
+datatiedostot mukana. Service worker löytää ne automaattisesti.
+
+> **Poikkeus:** jos vaihdat pelin nimeä Claude Designissa, viedyn tiedoston
+> nimi muuttuu. Silloin muuta `index.html`:n `<iframe src="...">`-riviä
+> vastaamaan uutta nimeä, tai nimeä viety tiedosto takaisin muotoon
+> `Katuvisa.dc.html`.
 
 ---
 
 ## Tiedostot
 
-| Tiedosto | Mitä tekee |
+| Tiedosto | Muokkaatko? |
 | --- | --- |
-| `index.html` | Sovelluksen rakenne ja logiikka (Claude Designin vienti) |
-| `support.js` | Claude Designin ajonaikainen kirjasto — älä muokkaa |
-| `map-data.js` | Helsingin keskustan kartta (kadut, korttelit, puistot) |
-| `street-facts.js` | Katufaktat oletusmoodiin |
-| `party-facts.js` | Katufaktat urbaaniin moodiin |
-| `vendor/` | React-kirjasto paikallisena kopiona (toimii offline) |
-| `manifest.webmanifest` | Kertoo puhelimelle nimen, värit ja ikonin |
-| `sw.js` | Service worker: tallentaa sovelluksen offline-käyttöön |
-| `icon-*.png`, `apple-touch-icon.png` | Kuvakkeet |
+| `Katuvisa.dc.html` | Kyllä — korvautuu jokaisella viennillä |
+| `support.js` | Kyllä — tulee viennin mukana |
+| `map-data*.js`, `*-facts.js` | Kyllä — tulevat viennin mukana |
+| `index.html` | Ei koskaan |
+| `sw.js` | Ei koskaan |
+| `manifest.webmanifest` | Ei koskaan |
+| `icon-*.png`, `apple-touch-icon.png` | Ei koskaan |
 
-Kaikkien pitää olla samassa kansiossa, `vendor`-kansio omanaan. Älä nimeä uudelleen.
+Vanha `vendor`-kansio jää tässä mallissa käyttämättä. Voit poistaa sen tai
+jättää paikalleen — se ei vaikuta mihinkään.
 
 ---
 
-## Lähteet
+## Huomioita
 
-Kartta-aineisto on **OpenStreetMapista** (ODbL). Maininta näkyy kartan
-vasemmassa alakulmassa.
+**Ensimmäinen avaus vaatii verkkoyhteyden.** Claude Designin ajonaikainen
+kirjasto hakee React-kirjaston unpkg.com-palvelusta ja ikonifontin Google
+Fontsista. Service worker tallentaa molemmat välimuistiin, joten seuraavilla
+kerroilla peli toimii myös offline. Jos ikonifontti ei ole vielä latautunut,
+nappien tilalla näkyy hetken sanoja kuten `chevron_left` — se korjautuu
+itsestään.
 
-## Tallennus
+**Jos peli näyttää vanhalta päivityksen jälkeen:** sulje sovellus kokonaan
+(pyyhkäise pois tehtävänvaihtajasta) ja avaa uudelleen. Vanha service worker
+voi tarjoilla välimuistista yhden kerran ennen kuin uusi ottaa vallan.
 
-Pisteet ja edistyminen tallentuvat vain selaimen muistiin — ne eivät synkronoidu
-laitteiden välillä eivätkä palaudu, jos selaimen data tyhjennetään.
+**Kartta-aineisto** on OpenStreetMapista (ODbL). Maininta näkyy kartan
+vasemmassa alakulmassa — pidä se paikallaan.
+
+**Pisteet** tallentuvat vain selaimen muistiin. Ne eivät synkronoidu laitteiden
+välillä eivätkä palaudu, jos selaimen data tyhjennetään.

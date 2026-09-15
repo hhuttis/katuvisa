@@ -1,7 +1,7 @@
 {
-  "name": "Katuvisa - Helsingin ydinkeskusta",
+  "name": "Katuvisa — Helsingin kadut",
   "short_name": "Katuvisa",
-  "description": "Opi Helsingin keskustan kadut, maamerkit ja menomestat visan avulla.",
+  "description": "Opi Helsingin keskustan kadut, maamerkit ja menomestat karttavisan avulla.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

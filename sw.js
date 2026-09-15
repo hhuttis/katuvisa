@@ -1,30 +1,24 @@
 /* Katuvisa — service worker.
-   Strategy: always try the network first, fall back to the cache when offline.
-   That way a change pushed to GitHub shows up the next time the app is opened
-   with a connection, and the app still works in airplane mode. */
+   Verkko ensin, välimuisti varalle.
 
-const CACHE = 'katuvisa-v1';
+   Tämä versio ei sisällä kiinteää tiedostolistaa: se tallentaa välimuistiin
+   kaiken mitä sovellus käyttää sitä mukaa kun sitä ladataan. Niinpä uusien
+   datatiedostojen lisääminen tai nimen vaihtaminen ei riko offline-tukea
+   eikä vaadi muutoksia tähän tiedostoon. */
 
-const CORE = [
-  './',
-  './index.html',
-  './support.js',
-  './map-data.js',
-  './street-facts.js',
-  './party-facts.js',
-  './vendor/react.production.min.js',
-  './vendor/react-dom.production.min.js',
-  './manifest.webmanifest',
-  './icon-192.png',
-  './icon-512.png',
-  './icon-maskable.png',
-  './apple-touch-icon.png'
-];
+const CACHE = 'katuvisa-v3';
+
+const SHELL = ['./', './index.html'];
+
+const EXTRA_ORIGINS = ['unpkg.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE)
-      .then(cache => cache.addAll(CORE))
+      // Jokainen erikseen, jotta yksi puuttuva tiedosto ei kaada asennusta.
+      .then(cache => Promise.all(
+        SHELL.map(url => cache.add(url).catch(() => {}))
+      ))
       .then(() => self.skipWaiting())
       .catch(() => self.skipWaiting())
   );
@@ -33,9 +27,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-      ))
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -46,10 +38,7 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(req.url);
   const sameOrigin = url.origin === self.location.origin;
-  const isFont = url.hostname === 'fonts.googleapis.com' ||
-                 url.hostname === 'fonts.gstatic.com';
-
-  if (!sameOrigin && !isFont) return;
+  if (!sameOrigin && EXTRA_ORIGINS.indexOf(url.hostname) === -1) return;
 
   event.respondWith(
     fetch(req)
@@ -63,7 +52,6 @@ self.addEventListener('fetch', event => {
       .catch(() =>
         caches.match(req).then(hit => {
           if (hit) return hit;
-          // Navigations fall back to the app shell.
           if (req.mode === 'navigate') return caches.match('./index.html');
           return Response.error();
         })
