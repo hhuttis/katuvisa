@@ -7,7 +7,7 @@
 `Katuvisa.dc.html`, joka on Claude Designin vienti sellaisenaan.
 
 Tämä tarkoittaa, että **et koskaan enää nimeä mitään uudelleen etkä liitä
-metatietoja käsin**. Juuri se askel meni aiemmin pieleen.
+metatietoja käsin**. 
 
 ---
 
