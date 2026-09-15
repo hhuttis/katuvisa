@@ -42,7 +42,9 @@
 
   <div style="display: grid; grid-template-columns: {{ headerCols }}; grid-template-rows: {{ headerRows }}; column-gap: 22px; row-gap: 12px; align-items: start; margin-bottom: -2px; margin-top: {{ headerMt }};">
       <div style="grid-column: 1; grid-row: 1; height: 34px; display: flex; align-items: flex-end;">
-        <div style="font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83;">{{ eyebrow }}</div>
+        <sc-if value="{{ showEyebrowText }}" hint-placeholder-val="{{ true }}">
+          <div style="font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #918d83; max-width: {{ eyebrowMax }}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ eyebrow }}</div>
+        </sc-if>
       </div>
       <div style="grid-column: 1; grid-row: 2; display: flex; align-items: center;">
         <sc-if value="{{ inGame }}" hint-placeholder-val="{{ false }}">
@@ -58,11 +60,11 @@
           </div>
         </sc-if>
       </div>
-    <div data-popover="menu" style="grid-column: 2; grid-row: 1; height: 34px; display: flex; align-items: flex-end; justify-content: flex-end; gap: 14px; position: relative;">
+    <div data-popover="menu" style="grid-column: {{ headerRightCol }}; grid-row: 1; height: 34px; display: flex; align-items: flex-end; justify-content: flex-end; gap: 14px; position: relative;">
       <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
       <div data-popover="region" style="position: relative; display: flex; align-items: center;">
         <button onClick="{{ toggleRegionMenu }}" title="Vaihda pelialuetta" style="display: flex; align-items: center; gap: 6px; border: 1px solid #dedad1; background: #fffefb; color: #3f3d38; font-family: inherit; font-size: 13px; font-weight: 600; padding: 5px 9px 5px 11px; border-radius: 6px; cursor: pointer;" style-hover="border-color: #b8b2a5;">
-          <span style="white-space: nowrap;">{{ regionLabel }}</span>
+          <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: {{ regionLabelMax }};">{{ regionLabel }}</span>
           <span style="font-family: 'Material Symbols Rounded'; font-size: 18px; line-height: 1; font-weight: 300; font-variation-settings: 'FILL' 0, 'wght' 300; color: #918d83;">expand_more</span>
         </button>
         <sc-if value="{{ regionMenuOpen }}" hint-placeholder-val="{{ false }}">
@@ -102,8 +104,10 @@
       </sc-if>
       </sc-if>
     </div>
+    <sc-if value="{{ showBarExtras }}" hint-placeholder-val="{{ true }}">
     <div style="grid-column: 2; grid-row: 2; align-self: stretch; display: flex; align-items: flex-end; justify-content: flex-end; min-height: 20px;">
     </div>
+    </sc-if>
   </div>
 
   <div style="display: flex; flex-wrap: wrap; gap: 22px; align-items: stretch;">
@@ -1405,7 +1409,7 @@ class Component extends DCLogic {
       toggleRegionMenu: this.toggleRegionMenu,
       showUrbanMode: !!reg.party,
       subLine: reg.sub,
-      regionOptions: Object.keys(REGIONS).map(k => ({
+      regionOptions: ['keskusta', 'kallio', 'haaga', 'laajasalo'].filter(k => REGIONS[k]).map(k => ({
         label: REGIONS[k].label, note: REGIONS[k].note, click: this.setRegion(k),
         check: st.region === k ? '✓' : '', bg: st.region === k ? '#f4f2ec' : 'transparent'
       })),
@@ -1415,7 +1419,7 @@ class Component extends DCLogic {
       defCheck: st.party ? '' : '✓', urbCheck: st.party ? '✓' : '',
       defBg: st.party ? 'transparent' : '#f4f2ec', urbBg: st.party ? '#eff3fd' : 'transparent',
       defFg: '#20201d', urbFg: st.party ? '#20201d' : '#20201d',
-      eyebrow: st.party ? ('Katuvisa · ' + (reg.night || 'Helsinki by night')) : 'Katuvisa',
+      eyebrow: st.party ? (st.vw >= 760 ? ('Katuvisa · ' + (reg.night || 'Helsinki by night')) : (reg.night || 'Helsinki by night')) : 'Katuvisa',
       zoomIn: this.zoomIn, zoomOut: this.zoomOut, zoomReset: this.zoomReset,
       zoomLabel: (Math.round((st.owner === this.frameKey() ? st.uz : 1) * 100) / 100) + '×',
       zoomOutColor: '#3a3934',
@@ -1467,12 +1471,16 @@ class Component extends DCLogic {
       showBurst: !!(st.burst && st.streak >= 2),
       showFlash: !!(st.flash && ans),
       streakLabel: Math.min(3, st.streak) + 'x kerroin',
-      headerRows: '34px auto auto',
+      headerRows: st.vw >= 760 ? '34px auto auto' : 'auto auto auto',
       headerMt: '0',
       modeTitle: st.scope === 'Kaikki' ? reg.label : st.scope,
       scopeBarLabel: st.scope === 'Kaikki' ? (st.region === 'keskusta' ? 'Koko ydinkeskusta' : ('Koko ' + reg.label)) : st.scope,
       showAllModes: st.vw >= 760,
-      headerCols: st.vw >= 760 ? 'minmax(240px, 1fr) 358px' : 'minmax(0, 1fr) minmax(0, auto)',
+      headerCols: st.vw >= 760 ? 'minmax(240px, 1fr) 358px' : 'minmax(0, 1fr)',
+      headerRightCol: st.vw >= 760 ? '2' : '1',
+      showEyebrowText: st.vw >= 360,
+      eyebrowMax: st.vw >= 760 ? 'none' : 'calc(100% - 205px)',
+      regionLabelMax: st.vw >= 420 ? 'none' : '150px',
       inGame: st.screen !== 'start',
       showEyebrow: st.screen === 'start',
       statusLeft: st.screen === 'study' ? ('Harjoittelu · ' + (st.idx + 1) + ' / ' + st.queue.length)
